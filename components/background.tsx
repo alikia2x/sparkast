@@ -1,30 +1,41 @@
-"use client";
-
-import { useContext } from "react";
-import { SettingsContext } from "../contexts/settingsContext";
 import Image from "next/image";
-
+import { useRecoilValue } from "recoil";
+import { settingsState } from "./state/settings";
+import validUrl from "valid-url";
+import validateColor from "validate-color";
 
 function Background(props: {
     isFocus: boolean;
     src: string;
     onClick: () => void;
 }) {
-    const settings = useContext(SettingsContext);
-    const css = "w-full h-full fixed object-cover inset-0 duration-200 z-0";
-    let focusCSS = settings.bgBlur
-        ? "blur-lg scale-110"
-        : "brightness-50 scale-105";
-    let varCSS = props.isFocus ? focusCSS : "";
-    return (
-        <Image
-            src={props.src}
-            className={css + " " + varCSS}
-            alt="background"
-            onClick={props.onClick}
-            fill={true}
-        />
-    );
+    const settings = useRecoilValue(settingsState);
+    if (validateColor(props.src)) {
+        return (
+            <div
+                className="w-full h-full fixed object-cover inset-0 duration-200 z-0"
+                style={{ backgroundColor: props.src }}
+                onClick={props.onClick}
+            ></div>
+        );
+    } else if (validUrl.isWebUri(props.src)) {
+        return (
+            <Image
+                src={props.src}
+                className={
+                    "w-full h-full fixed object-cover inset-0 duration-200 z-0 " +
+                    (props.isFocus
+                        ? settings.bgBlur
+                            ? "blur-lg scale-110"
+                            : "brightness-50 scale-105"
+                        : "")
+                }
+                alt="background"
+                onClick={props.onClick}
+                fill={true}
+            />
+        );
+    }
 }
 
 export default Background;
