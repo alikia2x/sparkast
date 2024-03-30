@@ -1,10 +1,14 @@
+'use client';
+
 import { atom, useRecoilValue } from "recoil";
 import { settingsState } from "../state/settings";
+import { useTranslations } from "next-intl";
 
 export default function Search(props: {
     onFocus: () => void;
 }) {
     const settings = useRecoilValue(settingsState);
+    const t = useTranslations('Search');
     let style = "default";
     if (style === "default") {
         return (
@@ -17,7 +21,7 @@ export default function Search(props: {
                     dark:placeholder:text-slate-400 text-slate-900 dark:text-white"
                     id="searchBox"
                     type="text"
-                    placeholder="Search"
+                    placeholder={t('placeholder')}
                     onFocus={props.onFocus}
                 />
             </div>
@@ -39,7 +43,7 @@ export default function Search(props: {
                     }
                     id="searchBox"
                     type="text"
-                    placeholder="Search"
+                    placeholder={t('placeholder')}
                     onFocus={props.onFocus}
                 />
             </div>
