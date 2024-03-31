@@ -5,7 +5,7 @@ import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { normalizeURL } from "@/lib/normalizeURL";
-import validLink from "@/lib/url/valid_link";
+import validLink from "@/lib/url/validLink";
 
 export default function Search(props: { onFocus: () => void }) {
     const settings: settings = useRecoilValue(settingsState);

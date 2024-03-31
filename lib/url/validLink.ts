@@ -1,5 +1,5 @@
 import punycode from "punycode/";
-import { tldList } from "./tld_list";
+import { tldList } from "./tldList";
 
 export default function validLink(link: string) {
     let finalURL = '';
@@ -24,7 +24,6 @@ export default function validLink(link: string) {
 
 function validTLD(domain: string): boolean {
     const tld = punycode.toUnicode(domain.split(".").reverse()[0]);
-    console.log(tld);
     if (tldList.includes(tld)) {
         return true;
     } else {
