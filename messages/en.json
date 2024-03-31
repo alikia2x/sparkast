@@ -1,6 +1,6 @@
 {
     "Search": {
-        "placeholder": "Search"
+        "placeholder": "Search or type a URL"
     },
     "404":{
         "title": "Page Not Found"
