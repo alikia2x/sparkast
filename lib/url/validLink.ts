@@ -6,6 +6,7 @@ export default function validLink(link: string) {
     try {
         const url = new URL(link);
         finalURL = url.origin;
+        return true;
     } catch (error) {
         // if the URL is invalid, try to add the protocol
         try {
@@ -22,7 +23,7 @@ export default function validLink(link: string) {
     }
 }
 
-function validTLD(domain: string): boolean {
+export function validTLD(domain: string): boolean {
     const tld = punycode.toUnicode(domain.split(".").reverse()[0]);
     if (tldList.includes(tld)) {
         return true;
