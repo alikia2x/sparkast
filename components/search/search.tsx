@@ -1,15 +1,36 @@
-'use client';
+"use client";
 
 import { atom, useRecoilValue } from "recoil";
 import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { normalizeURL } from "@/lib/normalizeURL";
+export default function Search(props: { onFocus: () => void }) {
+    const settings: settings = useRecoilValue(settingsState);
+    const t = useTranslations("Search");
+    const [query, setQuery] = useState("");
 
-export default function Search(props: {
-    onFocus: () => void;
-}) {
-    const settings = useRecoilValue(settingsState);
-    const t = useTranslations('Search');
     let style = "default";
+
+    function handleKeydown(e: any) {
+        let URL = "";
+        let url_re =
+            /^https?:\/\/([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?:?[0-9]{0,5}\/?[-a-zA-Z0-9_.~!*'();:@&=+$,/?#\[\]%]*$/;
+        let domain_re =
+            /^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z][-a-zA-Z]{0,62})+\.?:?[0-9]{0,5}\/?[-a-zA-Z0-9_.~!*'();:@&=+$,/?#\[\]%]*$/;
+        let ip_re =
+            /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}:?[0-9]{0,5}\/?[-a-zA-Z0-9_.~!*'();:@&=+$,/?#\[\]%]*$/;
+        if (url_re.test(query) || domain_re.test(query) || ip_re.test(query)) {
+            URL = normalizeURL(query);
+        } else {
+            URL = settings.searchEngines[settings.currentSearchEngine];
+            URL = URL.replace("%s", query);
+        }
+        if (e.key == "Enter") {
+            location.href=URL;
+        }
+    }
+
     if (style === "default") {
         return (
             // 祖传样式，勿动
@@ -21,8 +42,15 @@ export default function Search(props: {
                     dark:placeholder:text-slate-400 text-slate-900 dark:text-white"
                     id="searchBox"
                     type="text"
-                    placeholder={t('placeholder')}
+                    placeholder={t("placeholder")}
                     onFocus={props.onFocus}
+                    onKeyDown={handleKeydown}
+                    onChange={(e) => setQuery(e.target.value)}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck="false"
+                    value={query}
                 />
             </div>
         );
@@ -43,7 +71,7 @@ export default function Search(props: {
                     }
                     id="searchBox"
                     type="text"
-                    placeholder={t('placeholder')}
+                    placeholder={t("placeholder")}
                     onFocus={props.onFocus}
                 />
             </div>
