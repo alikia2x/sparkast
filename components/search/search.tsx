@@ -5,6 +5,8 @@ import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { normalizeURL } from "@/lib/normalizeURL";
+import validLink from "@/lib/url/valid_link";
+
 export default function Search(props: { onFocus: () => void }) {
     const settings: settings = useRecoilValue(settingsState);
     const t = useTranslations("Search");
@@ -14,20 +16,14 @@ export default function Search(props: { onFocus: () => void }) {
 
     function handleKeydown(e: any) {
         let URL = "";
-        let url_re =
-            /^https?:\/\/([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?:?[0-9]{0,5}\/?[-a-zA-Z0-9_.~!*'();:@&=+$,/?#\[\]%]*$/;
-        let domain_re =
-            /^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z][-a-zA-Z]{0,62})+\.?:?[0-9]{0,5}\/?[-a-zA-Z0-9_.~!*'();:@&=+$,/?#\[\]%]*$/;
-        let ip_re =
-            /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}:?[0-9]{0,5}\/?[-a-zA-Z0-9_.~!*'();:@&=+$,/?#\[\]%]*$/;
-        if (url_re.test(query) || domain_re.test(query) || ip_re.test(query)) {
+        if (validLink(query)) {
             URL = normalizeURL(query);
         } else {
             URL = settings.searchEngines[settings.currentSearchEngine];
             URL = URL.replace("%s", query);
         }
         if (e.key == "Enter") {
-            location.href=URL;
+            location.href = URL;
         }
     }
 
