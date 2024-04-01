@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { settingsState } from "./state/settings";
 import { useFormatter } from "next-intl";
 
-export default function Time() {
+export default function Time(props: {
+    showSecond: boolean
+}) {
     const [currentTime, setCurrentTime] = useState(new Date());
-    const settings = useRecoilValue(settingsState);
     const format = useFormatter();
 
     useEffect(() => {
@@ -25,7 +24,7 @@ export default function Time() {
         const minutes = currentTime.getMinutes().toString().padStart(2, "0");
         const seconds = currentTime.getSeconds().toString().padStart(2, "0");
 
-        if (settings.timeShowSecond) {
+        if (props.showSecond) {
             return `${hours}:${minutes}:${seconds}`;
         } else {
             return `${hours}:${minutes}`;
