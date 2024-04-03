@@ -1,8 +1,21 @@
 {
     "Search": {
-        "placeholder": "Search or type a URL"
+        "placeholder": "Search or type a URL",
+        "engine-aria": "Switch search engine",
+        "engine": {
+            "google": "Google",
+            "baidu": "Baidu",
+            "bing": "Bing",
+            "duckduckgo": "DuckDuckGo",
+            "yandex": "Yandex",
+            "yahoo": "Yahoo",
+            "ecosia": "Ecosia"
+        }
     },
-    "404":{
+    "404": {
         "title": "Page Not Found"
+    },
+    "About": {
+        "title": "SparkHome"
     }
 }

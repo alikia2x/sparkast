@@ -8,6 +8,7 @@ import Search from "./search/search";
 import { bgFocusState } from "./state/background";
 import Time from "./time";
 import loadSettings from "@/lib/loadSettings";
+import EngineSelector from "./search/engineSelector";
 
 export default function Homepage() {
     const [settings, setSettings] = useRecoilState(settingsState);
@@ -36,6 +37,7 @@ export default function Homepage() {
     return (
         <div className="h-full fixed overflow-hidden w-full bg-black">
             <Time showSecond={settings.timeShowSecond} />
+            <EngineSelector/>
             {colorScheme === "dark" && (
                 <Background src="rgb(23,25,29)" isFocus={isFocus} onClick={() => setFocus(false)} />
             )}

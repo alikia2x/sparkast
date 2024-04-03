@@ -1,8 +1,18 @@
 {
     "Search": {
-        "placeholder": "搜索或输入网址"
+        "placeholder": "搜索或输入网址",
+        "engine-aria": "搜索引擎切换",
+        "engine": {
+            "google": "谷歌",
+            "baidu": "百度",
+            "bing": "必应",
+            "duckduckgo": "DuckDuckGo",
+            "yandex": "Yandex",
+            "yahoo": "雅虎",
+            "ecosia": "Ecosia"
+        }
     },
-    "404":{
+    "404": {
         "title": "未找到"
     }
 }

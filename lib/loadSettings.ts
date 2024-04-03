@@ -1,5 +1,7 @@
 'use client';
 
+import isLocalStorageAvailable from "./isLocalStorageAvailable";
+
 const defaultSettings = {
     version: 1,
     elementBackdrop: true,
@@ -14,16 +16,7 @@ const defaultSettings = {
         "yandex": "https://yandex.com/search/?text=%s",
     }
 }
-function isLocalStorageAvailable(){
-    var test = 'test';
-    try {
-        localStorage.setItem(test, test);
-        localStorage.removeItem(test);
-        return true;
-    } catch(e) {
-        return false;
-    }
-}
+
 
 export default function (setSettings: any) {
     if (isLocalStorageAvailable()===false){

@@ -1,6 +1,6 @@
 "use client";
 
-import { atom, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
