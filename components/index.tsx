@@ -37,7 +37,9 @@ export default function Homepage() {
     return (
         <div className="h-full fixed overflow-hidden w-full bg-black">
             <Time showSecond={settings.timeShowSecond} />
-            <EngineSelector/>
+            <EngineSelector className="absolute top-20 lg:top-44 short:top-0 translate-x-[-50%] translate-y-[-0.2rem]
+            left-1/2 w-11/12 sm:w-[700px] text:black text-right
+            dark:text-white text-3xl text-shadow-lg z-10"/>
             {colorScheme === "dark" && (
                 <Background src="rgb(23,25,29)" isFocus={isFocus} onClick={() => setFocus(false)} />
             )}

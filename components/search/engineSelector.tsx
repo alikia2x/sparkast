@@ -7,7 +7,9 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { settingsState } from "../state/settings";
 import { engineTranslation } from "./translatedEngineList";
 
-export default function () {
+export default function(
+    props: { className: string }
+) {
     const t = useTranslations("Search");
     const settings: settings = useRecoilValue(settingsState);
     const items = settings.searchEngines;
@@ -43,7 +45,7 @@ export default function () {
     }, []);
 
     return (
-        <div>
+        <div className={props.className}>
             {
             isClient &&
             (
@@ -55,7 +57,7 @@ export default function () {
                     </DropdownTrigger>
                     <DropdownMenu
                         aria-label={t("engine-aria")}
-                        variant="flat"
+                        variant="light"
                         disallowEmptySelection
                         selectionMode="single"
                         selectedKeys={selectedKeys}
