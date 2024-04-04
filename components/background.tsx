@@ -1,41 +1,48 @@
-import Image from "next/image";
-import { useRecoilValue } from "recoil";
-import { settingsState } from "./state/settings";
-import validUrl from "valid-url";
-import validateColor from "validate-color";
+"use client";
 
-function Background(props: {
-    isFocus: boolean;
-    src: string;
-    onClick: () => void;
-}) {
-    const settings = useRecoilValue(settingsState);
-    if (validateColor(props.src)) {
-        return (
-            <div
-                className="w-full h-full fixed object-cover inset-0 duration-200 z-0"
-                style={{ backgroundColor: props.src }}
-                onClick={props.onClick}
-            ></div>
-        );
-    } else if (validUrl.isWebUri(props.src)) {
-        return (
-            <Image
-                src={props.src}
-                className={
-                    "w-full h-full fixed object-cover inset-0 duration-200 z-0 " +
-                    (props.isFocus
-                        ? settings.bgBlur
-                            ? "blur-lg scale-110"
-                            : "brightness-50 scale-105"
-                        : "")
-                }
-                alt="background"
-                onClick={props.onClick}
-                fill={true}
-            />
-        );
-    }
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { bgFocusState } from "./state/background";
+
+import dynamic from "next/dynamic";
+
+const Background = dynamic(() => import("./backgroundContainer"), { ssr: false });
+
+export default function () {
+    const [isFocus, setFocus] = useRecoilState(bgFocusState);
+    const [colorScheme, setColorScheme] = useState("light");
+
+    useEffect(() => {
+        const colorSchemeQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+        setColorScheme(colorSchemeQueryList.matches ? "dark" : "light");
+
+        const handleChange = () => {
+            setColorScheme(colorSchemeQueryList.matches ? "dark" : "light");
+        };
+
+        colorSchemeQueryList.addEventListener("change", handleChange);
+
+        return () => {
+            colorSchemeQueryList.removeEventListener("change", handleChange);
+        };
+    }, []);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+    return (
+        <div suppressHydrationWarning>
+            {isClient && (
+                <div>
+                    {colorScheme === "dark" && (
+                        <Background src="rgb(23,25,29)" isFocus={isFocus} onClick={() => setFocus(false)} />
+                    )}
+                    {colorScheme === "light" && (
+                        <Background src="white" isFocus={isFocus} onClick={() => setFocus(false)} />
+                    )}
+                </div>
+            )}
+        </div>
+    );
 }
-
-export default Background;
