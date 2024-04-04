@@ -5,7 +5,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { settingsState } from "./state/settings";
 import Search from "./search/search";
 import { bgFocusState } from "./state/background";
-import loadSettings from "@/lib/loadSettings";
 import EngineSelector from "./search/engineSelector";
 import Onesearch from "./search/onesearch/onesearch";
 import dynamic from "next/dynamic";
@@ -20,10 +19,6 @@ const Time = dynamic(() => import("./time"), {
 export default function Homepage() {
     const [settings, setSettings] = useRecoilState(settingsState);
     const setFocus = useSetRecoilState(bgFocusState);
-
-    useEffect(() => {
-        loadSettings(setSettings);
-    }, [setSettings]);
 
     return (
         <div className="h-full fixed overflow-hidden w-full bg-black">
