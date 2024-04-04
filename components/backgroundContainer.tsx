@@ -4,11 +4,7 @@ import { settingsState } from "./state/settings";
 import validUrl from "valid-url";
 import validateColor from "validate-color";
 
-export default function(props: {
-    isFocus: boolean;
-    src: string;
-    onClick: () => void;
-}) {
+export default function (props: { isFocus: boolean; src: string; darkMode: boolean; onClick: () => void }) {
     const settings = useRecoilValue(settingsState);
     if (validateColor(props.src)) {
         return (
@@ -24,16 +20,28 @@ export default function(props: {
                 src={props.src}
                 className={
                     "w-full h-full fixed object-cover inset-0 duration-200 z-0 " +
-                    (props.isFocus
-                        ? settings.bgBlur
-                            ? "blur-lg scale-110"
-                            : "brightness-50 scale-105"
-                        : "")
+                    (props.isFocus ? (settings.bgBlur ? "blur-lg scale-110" : "brightness-50 scale-105") : "")
                 }
                 alt="background"
                 onClick={props.onClick}
                 fill={true}
             />
         );
+    } else {
+        if (props.darkMode) {
+            return (
+                <div
+                    className="w-full h-full fixed object-cover inset-0 duration-200 z-0 bg-[rgb(23,25,29)]"
+                    onClick={props.onClick}
+                ></div>
+            );
+        } else {
+            return (
+                <div
+                    className="w-full h-full fixed object-cover inset-0 duration-200 z-0 bg-white"
+                    onClick={props.onClick}
+                ></div>
+            );
+        }
     }
 }
