@@ -9,6 +9,9 @@ import { bgFocusState } from "./state/background";
 import Time from "./time";
 import loadSettings from "@/lib/loadSettings";
 import EngineSelector from "./search/engineSelector";
+import SuggestionBox from "./search/onesearch/suggestionBox";
+import Suggestion from "./search/onesearch/suggestion";
+import Onesearch from "./search/onesearch/onesearch";
 
 export default function Homepage() {
     const [settings, setSettings] = useRecoilState(settingsState);
@@ -45,6 +48,7 @@ export default function Homepage() {
             )}
             {colorScheme === "light" && <Background src="white" isFocus={isFocus} onClick={() => setFocus(false)} />}
             <Search onFocus={() => setFocus(true)} />
+            <Onesearch />
         </div>
     );
 }
