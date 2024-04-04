@@ -14,7 +14,8 @@ const nextConfig = {
                 pathname: "/*"
             }
         ]
-    }
+    },
+    output: 'standalone'
 };
 
 export default withNextIntl(nextConfig);
