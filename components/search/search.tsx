@@ -1,16 +1,17 @@
 "use client";
 
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { normalizeURL } from "@/lib/normalizeURL";
 import validLink from "@/lib/url/validLink";
+import { queryState } from "../state/query";
 
 export default function Search(props: { onFocus: () => void }) {
     const settings: settings = useRecoilValue(settingsState);
     const t = useTranslations("Search");
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useRecoilState(queryState);
 
     let style = "default";
 
@@ -41,7 +42,11 @@ export default function Search(props: { onFocus: () => void }) {
                     placeholder={t("placeholder")}
                     onFocus={props.onFocus}
                     onKeyDown={handleKeydown}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) =>
+                        setQuery((_) => {
+                            return e.target.value;
+                        })
+                    }
                     autoComplete="off"
                     autoCorrect="off"
                     autoCapitalize="off"
