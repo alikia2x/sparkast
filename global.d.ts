@@ -1,3 +1,5 @@
+import { Suggestion } from "search-engine-autocomplete";
+
 type settings = {
     version: number;
     elementBackdrop: boolean;
@@ -8,3 +10,10 @@ type settings = {
         [key: string]: string,
     };
 };
+
+type suggestionsResponse = {
+    suggestions: Suggestion[],
+    query: string,
+    verbatimRelevance: number,
+    time: number
+}
