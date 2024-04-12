@@ -3,13 +3,13 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { normalizeURL } from "@/lib/normalizeURL";
 import validLink from "@/lib/url/validLink";
 import { queryState } from "../state/query";
+import { settingsType } from "@/global";
 
 export default function Search(props: { onFocus: () => void }) {
-    const settings: settings = useRecoilValue(settingsState);
+    const settings: settingsType = useRecoilValue(settingsState);
     const t = useTranslations("Search");
     const [query, setQuery] = useRecoilState(queryState);
 

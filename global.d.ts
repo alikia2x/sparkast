@@ -1,6 +1,6 @@
 import { Suggestion } from "search-engine-autocomplete";
 
-type settings = {
+type settingsType = {
     version: number;
     elementBackdrop: boolean;
     bgBlur: boolean;
