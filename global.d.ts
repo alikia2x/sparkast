@@ -17,3 +17,10 @@ type suggestionsResponse = {
     verbatimRelevance: number,
     time: number
 }
+
+type suggestionItem = {
+    suggestion: string,
+    type: string,
+    relativeRelevance: number,
+    relevance?: number
+}
