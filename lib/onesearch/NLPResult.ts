@@ -7,6 +7,7 @@ export class NLPResult {
         public relevanceBase: number = 2000,
         public confidenceWeight: number = 0.2,
         public type: string = "text",
+        public prompt?: string | React.ReactElement
     ) {
     }
 

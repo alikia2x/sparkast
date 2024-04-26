@@ -135,6 +135,9 @@ export default function () {
                 } else if (s.type === "text") {
                     return (
                         <PlainText key={i} selected={i == selected}>
+                            {s.prompt && (
+                                <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>
+                            )}
                             <p>{s.suggestion}</p>
                             {devMode && (
                                 <span className="text-zinc-700 dark:text-zinc-400 text-sm">

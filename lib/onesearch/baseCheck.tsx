@@ -1,5 +1,6 @@
 import removeStopwords from "../nlp/stopwords";
 import { NLPResult } from "./NLPResult";
+import {Kbd} from "@nextui-org/react";
 
 interface KeywordsDict {
     [key: string]: number;
@@ -44,7 +45,7 @@ export function base64NLP(str: string) {
         }
     }
     
-    let processedQuery = "";
+    let processedQuery = str;
     if (result.intention==="base64.encode"){
         processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions)), true).trim();
     } else if (result.intention==="base64.decode") {
@@ -58,6 +59,7 @@ export function base64NLP(str: string) {
         }
     }
     else if (validBase64(processedQuery) && result.intention !== "base64.encode") {
+        console.log("!!");
         result.intention = "base64.decode";
         result.confidence += Math.max(1 / Math.log10(1 / processedQuery.length) + 1, 0);
         result.probability += Math.max(1 / Math.log10(1 / processedQuery.length) + 1, 0);
@@ -66,10 +68,12 @@ export function base64NLP(str: string) {
     switch (result.intention) {
         case "base64.encode":
             result.suggestion = btoa(processedQuery);
+            result.prompt = <span>Base64 Encode (Hit <Kbd keys={["enter"]}></Kbd> to copy):</span>;
             break;
         case "base64.decode":
             if (result.confidence > 0.1)
                 result.suggestion = atob(processedQuery);
+                result.prompt = <span>Base64 Decode (Hit <Kbd keys={["enter"]}></Kbd> to copy):</span>;
             break;
         default:
             break;

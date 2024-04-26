@@ -23,5 +23,9 @@ type suggestionItem = {
     suggestion: string,
     type: string,
     relativeRelevance?: number,
-    relevance: number
+    relevance: number,
+    prompt?: string | React.ReactElement,
+    intention?: string | null,
+    probability?: number,
+    confidence?: number,
 }
