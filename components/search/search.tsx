@@ -8,7 +8,7 @@ import { settingsType } from "@/global";
 import handleEnter from "./onesearch/handleEnter";
 import { selectedSuggestionState } from "../state/suggestionSelection";
 import { suggestionsState } from "../state/suggestion";
-import { KeyboardEvent } from "react";
+import { KeyboardEvent, useRef } from "react";
 
 export default function Search(props: { onFocus: () => void }) {
     const settings: settingsType = useRecoilValue(settingsState);
@@ -16,13 +16,14 @@ export default function Search(props: { onFocus: () => void }) {
     const [query, setQuery] = useRecoilState(queryState);
     const [selectedSuggestion, setSelected] = useRecoilState(selectedSuggestionState);
     const suggestions = useRecoilValue(suggestionsState);
+    const searchBoxRef = useRef<HTMLInputElement>(null);
 
     let style = "default";
 
     function handleKeydown(e: KeyboardEvent) {
         if (e.key == "Enter") {
             e.preventDefault();
-            handleEnter(selectedSuggestion, suggestions, query, settings);
+            handleEnter(selectedSuggestion, suggestions, query, settings, searchBoxRef);
             return;
         } else if (e.key == "ArrowUp") {
             e.preventDefault();
@@ -58,6 +59,7 @@ export default function Search(props: { onFocus: () => void }) {
                     autoCorrect="off"
                     autoCapitalize="off"
                     spellCheck="false"
+                    ref={searchBoxRef}
                     value={query}
                 />
             </div>
@@ -81,6 +83,7 @@ export default function Search(props: { onFocus: () => void }) {
                     type="text"
                     placeholder={t("placeholder")}
                     onFocus={props.onFocus}
+                    ref={searchBoxRef}
                 />
             </div>
         );

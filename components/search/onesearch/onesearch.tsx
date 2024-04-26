@@ -36,12 +36,11 @@ export default function () {
             .then((res) => res.json())
             .then((data: suggestionsResponse) => {
                 let suggestionToUpdate: suggestionItem[] = data.suggestions;
-                if (data.time > lastRequestTimeRef.current){
+                if (data.time > lastRequestTimeRef.current) {
                     cleanSuggestion("NAVIGATION", "QUERY");
                     lastRequestTimeRef.current = data.time;
                     updateSuggestion(suggestionToUpdate);
                 }
-                
             });
     }, [query]);
 
@@ -71,14 +70,13 @@ export default function () {
     }
 
     useEffect(() => {
+        cleanSuggestion("default-link", "default", "text");
         if (validLink(query)) {
-            cleanSuggestion("default-link","default","text")
             updateSuggestion([
                 { type: "default-link", suggestion: query, relevance: 3000 },
                 { type: "default", suggestion: query, relevance: 1600 }
             ]);
         } else {
-            cleanSuggestion("default-link","default","text")
             updateSuggestion([
                 {
                     type: "default",
@@ -88,8 +86,8 @@ export default function () {
             ]);
         }
         const b64 = base64NLP(query);
-        if (b64.suggestion!==null){
-            cleanSuggestion("default-link","default","text")
+        console.log(base64NLP(query));
+        if (b64.suggestion !== null) {
             updateSuggestion([b64 as suggestionItem]);
         }
     }, [query, engineName]);
@@ -125,11 +123,7 @@ export default function () {
                     );
                 } else if (s.type === "NAVIGATION" || s.type === "default-link") {
                     return (
-                        <Link
-                            key={i}
-                            query={s.suggestion}
-                            selected={i == selected}
-                        >
+                        <Link key={i} query={s.suggestion} selected={i == selected}>
                             {s.suggestion}
                             {devMode && (
                                 <span className="text-zinc-700 dark:text-zinc-400 text-sm">
@@ -148,7 +142,7 @@ export default function () {
                                 </span>
                             )}
                         </PlainText>
-                    )
+                    );
                 }
             })}
         </SuggestionBox>

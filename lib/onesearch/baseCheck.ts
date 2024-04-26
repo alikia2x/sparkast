@@ -46,7 +46,7 @@ export function base64NLP(str: string) {
     
     let processedQuery = "";
     if (result.intention==="base64.encode"){
-        processedQuery = str.split(" ")[str.split(" ").length-1];
+        processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions)), true).trim();
     } else if (result.intention==="base64.decode") {
         processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions))).trim();
     }
