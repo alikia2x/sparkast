@@ -87,9 +87,7 @@ export default function () {
                 }
             ]);
         }
-        console.log(new Date().getTime());
         const b64 = base64NLP(query);
-        console.log(new Date().getTime());
         if (b64.suggestion!==null){
             cleanSuggestion("default-link","default","text")
             updateSuggestion([b64 as suggestionItem]);

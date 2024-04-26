@@ -36,7 +36,6 @@ export function base64NLP(str: string) {
     };
     for (let intention of Object.keys(intentions)) {
         const pos = str.trim().indexOf(intention);
-        const l = str.length;
         const w = str.split(" ").length;
         if (w > 1 && pos !== -1) {
             result.confidence += intentions[intention];
@@ -44,8 +43,13 @@ export function base64NLP(str: string) {
             break;
         }
     }
-
-    let processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions))).trim();
+    
+    let processedQuery = "";
+    if (result.intention==="base64.encode"){
+        processedQuery = str.split(" ")[str.split(" ").length-1];
+    } else if (result.intention==="base64.decode") {
+        processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions))).trim();
+    }
     if (result.intention === "base64.decode"){
         if (validBase64(processedQuery)) {
             result.confidence = 1;
@@ -53,7 +57,7 @@ export function base64NLP(str: string) {
             result.confidence = 0;
         }
     }
-    else if (validBase64(processedQuery)) {
+    else if (validBase64(processedQuery) && result.intention !== "base64.encode") {
         result.intention = "base64.decode";
         result.confidence += Math.max(1 / Math.log10(1 / processedQuery.length) + 1, 0);
         result.probability += Math.max(1 / Math.log10(1 / processedQuery.length) + 1, 0);
@@ -64,7 +68,8 @@ export function base64NLP(str: string) {
             result.suggestion = btoa(processedQuery);
             break;
         case "base64.decode":
-            result.suggestion = atob(processedQuery);
+            if (result.confidence > 0.1)
+                result.suggestion = atob(processedQuery);
             break;
         default:
             break;
