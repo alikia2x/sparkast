@@ -16,7 +16,7 @@ export default function (
     let clipboard: any;
     if (selected.type === "QUERY" || selected.type === "default") {
         search(selected.suggestion, engine, newTab);
-    } else if (selected.type === "NAVIGATION") {
+    } else if (selected.type === "NAVIGATION" || selected.type === "default-link") {
         window.open(normalizeURL(selected.suggestion));
     } else if (selected.type === "text") {
         console.log("????");

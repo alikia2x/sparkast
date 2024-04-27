@@ -1,3 +1,4 @@
+import slotExtract from "../nlp/extract";
 import removeStopwords from "../nlp/stopwords";
 import { NLPResult } from "./NLPResult";
 import {Kbd} from "@nextui-org/react";
@@ -47,7 +48,10 @@ export function base64NLP(str: string) {
     
     let processedQuery = str;
     if (result.intention==="base64.encode"){
-        processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions)), true).trim();
+        const blacklist = Object.keys(keywords).concat(Object.keys(intentions)).concat([
+            "convert", "turn"
+        ]);
+        processedQuery = slotExtract(str,blacklist);
     } else if (result.intention==="base64.decode") {
         processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions))).trim();
     }
@@ -61,8 +65,8 @@ export function base64NLP(str: string) {
     else if (validBase64(processedQuery) && result.intention !== "base64.encode") {
         console.log("!!");
         result.intention = "base64.decode";
-        result.confidence += Math.max(1 / Math.log10(1 / processedQuery.length) + 1, 0);
-        result.probability += Math.max(1 / Math.log10(1 / processedQuery.length) + 1, 0);
+        result.confidence += Math.max(1 / Math.log2(1 / processedQuery.length) + 1, 0);
+        result.probability += Math.max(1 / Math.log2(1 / processedQuery.length) + 1, 0);
     }
 
     switch (result.intention) {

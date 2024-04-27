@@ -13,13 +13,14 @@ import { selectedSuggestionState } from "@/components/state/suggestionSelection"
 import { settingsState } from "@/components/state/settings";
 import { base64NLP } from "@/lib/onesearch/baseCheck";
 import PlainText from "./plainText";
+import { sendError } from "@/lib/telemetering/sendError";
 
 export default function () {
     const [suggestion, setFinalSuggetsion] = useRecoilState(suggestionsState);
     const lastRequestTimeRef = useRef(0);
     const selected = useRecoilValue(selectedSuggestionState);
     const settings = useRecoilValue(settingsState);
-    const devMode = true;
+    const devMode = false;
     const query = useRecoilValue(queryState);
     const engineName = getSearchEngineName();
     const engine = settings.currentSearchEngine;
@@ -28,19 +29,27 @@ export default function () {
 
     useEffect(() => {
         const time = new Date().getTime().toString();
-        if (query.trim() === "") {
+        if (query.trim() === "" || query.length > 120) {
             cleanSuggestion("QUERY", "NAVIGATION");
             return;
         }
         fetch(`/api/suggestion?q=${query}&l=${lang}&t=${time}&engine=${engine}`)
             .then((res) => res.json())
             .then((data: suggestionsResponse) => {
-                let suggestionToUpdate: suggestionItem[] = data.suggestions;
-                if (data.time > lastRequestTimeRef.current) {
-                    cleanSuggestion("NAVIGATION", "QUERY");
-                    lastRequestTimeRef.current = data.time;
-                    updateSuggestion(suggestionToUpdate);
+                try {
+                    let suggestionToUpdate: suggestionItem[] = data.suggestions;
+                    if (data.time > lastRequestTimeRef.current) {
+                        cleanSuggestion("NAVIGATION", "QUERY");
+                        lastRequestTimeRef.current = data.time;
+                        updateSuggestion(suggestionToUpdate);
+                    }
+                } catch (error: Error | any) {
+                    sendError(error);
                 }
+            })
+            .catch((error) => {
+                // Handle fetch error
+                sendError(error);
             });
     }, [query]);
 
@@ -73,7 +82,7 @@ export default function () {
         cleanSuggestion("default-link", "default", "text");
         if (validLink(query)) {
             updateSuggestion([
-                { type: "default-link", suggestion: query, relevance: 3000 },
+                { type: "default-link", suggestion: query, relevance: 3000, prompt: <span>Go to: </span> },
                 { type: "default", suggestion: query, relevance: 1600 }
             ]);
         } else {
@@ -86,7 +95,6 @@ export default function () {
             ]);
         }
         const b64 = base64NLP(query);
-        console.log(base64NLP(query));
         if (b64.suggestion !== null) {
             updateSuggestion([b64 as suggestionItem]);
         }
@@ -124,6 +132,7 @@ export default function () {
                 } else if (s.type === "NAVIGATION" || s.type === "default-link") {
                     return (
                         <Link key={i} query={s.suggestion} selected={i == selected}>
+                            {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
                             {s.suggestion}
                             {devMode && (
                                 <span className="text-zinc-700 dark:text-zinc-400 text-sm">
@@ -135,9 +144,7 @@ export default function () {
                 } else if (s.type === "text") {
                     return (
                         <PlainText key={i} selected={i == selected}>
-                            {s.prompt && (
-                                <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>
-                            )}
+                            {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
                             <p>{s.suggestion}</p>
                             {devMode && (
                                 <span className="text-zinc-700 dark:text-zinc-400 text-sm">
