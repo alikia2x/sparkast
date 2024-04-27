@@ -18,5 +18,10 @@
     },
     "About": {
         "title": "SparkHome"
+    },
+    "tools": {
+        "base64": {
+            "title": "Base64 tools - LuminaraUtils"
+        }
     }
 }

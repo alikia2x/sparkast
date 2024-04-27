@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { settingsState } from "./state/settings";
 import Search from "./search/search";
 import { bgFocusState } from "./state/background";
@@ -17,7 +16,7 @@ const Time = dynamic(() => import("./time"), {
 });
 
 export default function Homepage() {
-    const [settings, setSettings] = useRecoilState(settingsState);
+    const settings = useRecoilValue(settingsState);
     const setFocus = useSetRecoilState(bgFocusState);
 
     return (
