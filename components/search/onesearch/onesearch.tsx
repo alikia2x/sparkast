@@ -20,7 +20,7 @@ export default function () {
     const lastRequestTimeRef = useRef(0);
     const selected = useRecoilValue(selectedSuggestionState);
     const settings = useRecoilValue(settingsState);
-    const devMode = false;
+    const devMode = true;
     const query = useRecoilValue(queryState);
     const engineName = getSearchEngineName();
     const engine = settings.currentSearchEngine;
@@ -112,8 +112,8 @@ export default function () {
                                 {t("search-help-text", { engine: engineName })}
                             </span>
                             {devMode && (
-                                <span className="text-zinc-700 dark:text-zinc-400 text-sm">
-                                    &nbsp;&nbsp;Relevance: {s.relevance}
+                                <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
+                                    {s.relevance}
                                 </span>
                             )}
                         </PlainSearch>
@@ -123,8 +123,8 @@ export default function () {
                         <PlainSearch key={i} query={s.suggestion} selected={i == selected}>
                             {s.suggestion}
                             {devMode && (
-                                <span className="text-zinc-700 dark:text-zinc-400 text-sm">
-                                    &nbsp;&nbsp;Relevance: {s.relevance}
+                                <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
+                                    {s.relevance}
                                 </span>
                             )}
                         </PlainSearch>
@@ -135,8 +135,8 @@ export default function () {
                             {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
                             {s.suggestion}
                             {devMode && (
-                                <span className="text-zinc-700 dark:text-zinc-400 text-sm">
-                                    &nbsp;&nbsp;Relevance: {s.relevance}
+                                <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
+                                    {s.relevance}
                                 </span>
                             )}
                         </Link>
@@ -147,8 +147,8 @@ export default function () {
                             {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
                             <p>{s.suggestion}</p>
                             {devMode && (
-                                <span className="text-zinc-700 dark:text-zinc-400 text-sm">
-                                    Relevance: {s.relevance}
+                                <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
+                                    {s.relevance}
                                 </span>
                             )}
                         </PlainText>
