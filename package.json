@@ -24,10 +24,12 @@
     "search-engine-autocomplete": "^0.4.3",
     "tailwind-merge": "^2.3.0",
     "ts-node": "^10.9.2",
+    "unicode-encode": "^1.4.2",
     "valid-url": "^1.0.9",
     "validate-color": "^2.2.4"
   },
   "devDependencies": {
+    "@iconify-icon/react": "^2.1.0",
     "@jest/globals": "^29.7.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.3.1",
