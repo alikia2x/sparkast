@@ -1,7 +1,7 @@
 import slotExtract from "../nlp/extract";
 import removeStopwords from "../nlp/stopwords";
 import { NLPResult } from "./NLPResult";
-import {Kbd} from "@nextui-org/react";
+import { Kbd } from "@nextui-org/react";
 
 interface KeywordsDict {
     [key: string]: number;
@@ -45,25 +45,21 @@ export function base64NLP(str: string) {
             break;
         }
     }
-    
+
     let processedQuery = str;
-    if (result.intention==="base64.encode"){
-        const blacklist = Object.keys(keywords).concat(Object.keys(intentions)).concat([
-            "convert", "turn"
-        ]);
-        processedQuery = slotExtract(str,blacklist);
-    } else if (result.intention==="base64.decode") {
+    if (result.intention === "base64.encode") {
+        const blacklist = Object.keys(keywords).concat(Object.keys(intentions)).concat(["convert", "turn"]);
+        processedQuery = slotExtract(str, blacklist);
+    } else if (result.intention === "base64.decode") {
         processedQuery = removeStopwords(str, Object.keys(keywords).concat(Object.keys(intentions))).trim();
     }
-    if (result.intention === "base64.decode"){
+    if (result.intention === "base64.decode") {
         if (validBase64(processedQuery)) {
             result.confidence = 1;
         } else {
             result.confidence = 0;
         }
-    }
-    else if (validBase64(processedQuery) && result.intention !== "base64.encode") {
-        console.log("!!");
+    } else if (validBase64(processedQuery) && result.intention !== "base64.encode") {
         result.intention = "base64.decode";
         result.confidence += Math.max(1 / Math.log2(1 / processedQuery.length) + 1, 0);
         result.probability += Math.max(1 / Math.log2(1 / processedQuery.length) + 1, 0);
@@ -72,12 +68,19 @@ export function base64NLP(str: string) {
     switch (result.intention) {
         case "base64.encode":
             result.suggestion = btoa(processedQuery);
-            result.prompt = <span>Base64 Encode (Hit <Kbd keys={["enter"]}></Kbd> to copy):</span>;
+            result.prompt = (
+                <span>
+                    Base64 Encode (Hit <Kbd keys={["enter"]}></Kbd> to copy):
+                </span>
+            );
             break;
         case "base64.decode":
-            if (result.confidence > 0.1)
-                result.suggestion = atob(processedQuery);
-                result.prompt = <span>Base64 Decode (Hit <Kbd keys={["enter"]}></Kbd> to copy):</span>;
+            if (result.confidence > 0.1) result.suggestion = atob(processedQuery);
+            result.prompt = (
+                <span>
+                    Base64 Decode (Hit <Kbd keys={["enter"]}></Kbd> to copy):
+                </span>
+            );
             break;
         default:
             break;

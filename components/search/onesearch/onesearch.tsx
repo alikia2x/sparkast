@@ -147,7 +147,7 @@ export default function () {
                             {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
                             <p>{s.suggestion}</p>
                             {devMode && (
-                                <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
+                                <span className="bottom-0 absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
                                     {s.relevance}
                                 </span>
                             )}

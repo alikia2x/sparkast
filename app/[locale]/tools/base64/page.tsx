@@ -19,6 +19,8 @@ export default function Base64() {
     const [info, setInfo] = useState("");
     const [type, setType] = useState("");
     useEffect(() => {
+        setType("");
+        setInfo("");
         setHex(false);
         if (mode == "Encode") {
             setMessageResult(utoa(message));
@@ -29,14 +31,18 @@ export default function Base64() {
                 } catch (e) {
                     setMessageResult(normalizeHex(base64ToHex(message)));
                     setHex(true);
+                    setType("info");
+                    setInfo("Showing HEX result.");
                 }
             } else if (message.trim() !== "") {
-                setMessageResult("Invalid Base64");
+                setMessageResult("");
+                setType("warning");
+                setInfo("Invalid Base64.");
             } else {
                 setMessageResult("");
             }
         }
-    });
+    }, [mode, message]);
     return (
         <div>
             <h1 className="text-3xl font-semibold">{t("base64.title")}</h1>
@@ -68,10 +74,9 @@ export default function Base64() {
                     isHex ? "font-mono" : ""
                 }`}
             >
-                {messageResult.length > 0 ? messageResult : "Waiting for input..."}
+                {messageResult}
             </div>
             <Notice type={type} info={info} class="mt-4" />
-            <Notice type="info" info="HI." class="mt-4" />
         </div>
     );
 }
