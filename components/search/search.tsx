@@ -3,28 +3,36 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { settingsState } from "../state/settings";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { normalizeURL } from "@/lib/normalizeURL";
-import validLink from "@/lib/url/validLink";
 import { queryState } from "../state/query";
+import { settingsType } from "@/global";
+import handleEnter from "./onesearch/handleEnter";
+import { selectedSuggestionState } from "../state/suggestionSelection";
+import { suggestionsState } from "../state/suggestion";
+import { KeyboardEvent, useRef } from "react";
 
 export default function Search(props: { onFocus: () => void }) {
-    const settings: settings = useRecoilValue(settingsState);
+    const settings: settingsType = useRecoilValue(settingsState);
     const t = useTranslations("Search");
     const [query, setQuery] = useRecoilState(queryState);
+    const [selectedSuggestion, setSelected] = useRecoilState(selectedSuggestionState);
+    const suggestions = useRecoilValue(suggestionsState);
+    const searchBoxRef = useRef<HTMLInputElement>(null);
 
     let style = "default";
 
-    function handleKeydown(e: any) {
-        let URL = "";
-        if (validLink(query)) {
-            URL = normalizeURL(query);
-        } else {
-            URL = settings.searchEngines[settings.currentSearchEngine];
-            URL = URL.replace("%s", query);
-        }
+    function handleKeydown(e: KeyboardEvent) {
         if (e.key == "Enter") {
-            location.href = URL;
+            e.preventDefault();
+            handleEnter(selectedSuggestion, suggestions, query, settings, searchBoxRef);
+            return;
+        } else if (e.key == "ArrowUp") {
+            e.preventDefault();
+            const len = suggestions.length;
+            setSelected((selectedSuggestion - 1 + len) % len);
+        } else if (e.key == "ArrowDown") {
+            e.preventDefault();
+            const len = suggestions.length;
+            setSelected((selectedSuggestion + 1) % len);
         }
     }
 
@@ -51,6 +59,7 @@ export default function Search(props: { onFocus: () => void }) {
                     autoCorrect="off"
                     autoCapitalize="off"
                     spellCheck="false"
+                    ref={searchBoxRef}
                     value={query}
                 />
             </div>
@@ -74,6 +83,7 @@ export default function Search(props: { onFocus: () => void }) {
                     type="text"
                     placeholder={t("placeholder")}
                     onFocus={props.onFocus}
+                    ref={searchBoxRef}
                 />
             </div>
         );

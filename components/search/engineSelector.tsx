@@ -6,12 +6,13 @@ import { useTranslations } from "next-intl";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { settingsState } from "../state/settings";
 import { engineTranslation } from "./translatedEngineList";
+import { settingsType } from "@/global";
 
 export default function(
     props: { className: string }
 ) {
     const t = useTranslations("Search");
-    const settings: settings = useRecoilValue(settingsState);
+    const settings: settingsType = useRecoilValue(settingsState);
     const items = settings.searchEngines;
     const currentEngine: string = settings.currentSearchEngine;
     const displayEngine = getName(currentEngine);
@@ -20,7 +21,7 @@ export default function(
     const setSettings = useSetRecoilState(settingsState);
 
     function setEngine(engine: string) {
-        setSettings((oldSettings) => {
+        setSettings((oldSettings: settingsType) => {
             return {
                 ...oldSettings,
                 currentSearchEngine: engine

@@ -12,7 +12,6 @@ export function normalizeURL(input: string): string {
             return urlWithHTTP.href;
         } catch (error) {
             // if the URL is still invalid, return the original input
-            console.error("Invalid URL:", input);
             return input;
         }
     }

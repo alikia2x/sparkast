@@ -10,12 +10,18 @@
             "yandex": "Yandex",
             "yahoo": "Yahoo",
             "ecosia": "Ecosia"
-        }
+        },
+        "search-help-text": "Search {engine}"
     },
     "404": {
         "title": "Page Not Found"
     },
     "About": {
         "title": "SparkHome"
+    },
+    "tools": {
+        "base64": {
+            "title": "Base64 tools - LuminaraUtils"
+        }
     }
 }
