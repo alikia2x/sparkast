@@ -1,9 +1,9 @@
 export class NLPResult {
     constructor(
-        public suggestion: string | null,
-        public intention: string | null,
-        public probability: number,
-        public confidence: number,
+        public suggestion: string | null = null,
+        public intention: string | null = null,
+        public probability: number = 0,
+        public confidence: number = 0,
         public relevanceBase: number = 2000,
         public confidenceWeight: number = 0.2,
         public type: string = "text",
