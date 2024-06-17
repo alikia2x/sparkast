@@ -36,5 +36,9 @@ yarn-error.log*
 next-env.d.ts
 .syncignore
 
-#log
+# log
 app.log
+
+# doc
+doc/.vitepress/dist
+doc/.vitepress/cache
