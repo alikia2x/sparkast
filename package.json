@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "docs:dev": "vitepress dev doc",
+    "docs:build": "vitepress build doc",
+    "docs:preview": "vitepress preview doc"
   },
   "dependencies": {
     "@nextui-org/react": "^2.3.6",
@@ -45,6 +48,8 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitepress": "^1.2.3",
+    "vue": "^3.4.29"
   }
 }
