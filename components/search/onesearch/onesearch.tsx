@@ -11,12 +11,19 @@ import validLink from "@/lib/url/validLink";
 import Link from "./link";
 import { selectedSuggestionState } from "@/components/state/suggestionSelection";
 import { settingsState } from "@/components/state/settings";
-import { base64NLP } from "@/lib/onesearch/baseCheck";
 import PlainText from "./plainText";
 import { sendError } from "@/lib/telemetering/sendError";
+import { NLU } from "@/lib/nlp/load";
+import { getLocationNative } from "@/lib/weather/getLocation";
+import { getWeather } from "@/lib/weather/getWeather";
+import { findClosestDateIndex, getClosestHourTimestamp } from "@/lib/weather/getCurrentWeather";
+import { WMOCodeTable } from "@/lib/weather/wmocode";
+import { handleNLUResult } from "./handleNLUResult";
 
 export default function () {
     const [suggestion, setFinalSuggetsion] = useRecoilState(suggestionsState);
+    const [location, setLocation] = useState(null);
+    const [manager, setManager] = useState(null);
     const lastRequestTimeRef = useRef(0);
     const selected = useRecoilValue(selectedSuggestionState);
     const settings = useRecoilValue(settingsState);
@@ -78,6 +85,15 @@ export default function () {
         });
     }
 
+    const NLUModel = new NLU();
+
+    useEffect(() => {
+        NLUModel.init().then((nlu) => {
+            setManager(nlu.manager);
+            console.log(nlu.manager);
+        });
+    }, []);
+
     useEffect(() => {
         cleanSuggestion("default-link", "default", "text");
         if (validLink(query)) {
@@ -94,9 +110,13 @@ export default function () {
                 }
             ]);
         }
-        const b64 = base64NLP(query);
-        if (b64.suggestion !== null) {
-            updateSuggestion([b64 as suggestionItem]);
+
+        if (manager != null) {
+            // @ts-ignore
+            manager.process(query).then((result) => {
+                console.log(result);
+                handleNLUResult(result, updateSuggestion);
+            });
         }
     }, [query, engineName]);
 
