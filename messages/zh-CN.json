@@ -18,7 +18,12 @@
     },
     "tools": {
         "base64": {
-            "title": "Base64 工具"
+            "title": "Base64 工具",
+            "decode": "解码",
+            "encode": "编码",
+            "result": "结果：",
+            "copy": "复制",
+            "copied": "已复制"
         }
     }
 }

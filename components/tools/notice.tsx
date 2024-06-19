@@ -23,7 +23,7 @@ export default function Notice(props: { type: string; info: string; class?: stri
             <div
                 className={`relative ${props.class} ${
                     typeToColor[props.type]
-                } rounded-md w-full min-h-12 h-fit empty:px-0 px-4 z-20 cursor-pointer duration-100 `}
+                } rounded-md w-full min-h-12 h-fit empty:px-0 px-4 z-20 cursor-pointer duration-100 text-white`}
             >
                 <Icon className="text-2xl mt-3" icon={typeToIcon[props.type]} />
                 <span className="absolute text-base mt-3 ml-1">{props.info}</span>

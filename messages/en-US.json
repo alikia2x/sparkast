@@ -21,7 +21,12 @@
     },
     "tools": {
         "base64": {
-            "title": "Base64 tools - LuminaraUtils"
+            "title": "Base64 tools - LuminaraUtils",
+            "decode": "Decode",
+            "encode": "Encode",
+            "result": "Result: ",
+            "copy": "Copy",
+            "copied": "Copied"
         }
     }
 }
