@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useFormatter } from "next-intl";
+import { useState, useEffect } from "react";
 
 export default function Time(props: {
     showSecond: boolean
 }) {
     const [currentTime, setCurrentTime] = useState(new Date());
-    const format = useFormatter();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -39,11 +37,9 @@ export default function Time(props: {
         >
             {formatTime()}{" "}
             <span className="text-lg leading-9 relative">
-                {format.dateTime(currentTime, {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric"
-                })}
+                {new Intl.DateTimeFormat(navigator.language, {
+                    dateStyle: "medium"
+                }).format(currentTime)}
             </span>
         </div>
     );

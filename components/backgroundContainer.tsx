@@ -1,11 +1,15 @@
-import Image from "next/image";
-import { useRecoilValue } from "recoil";
-import { settingsState } from "./state/settings";
+import { settingsAtom } from "lib/state/settings";
 import validUrl from "valid-url";
 import validateColor from "validate-color";
+import { useAtomValue } from "jotai";
 
-export default function (props: { isFocus: boolean; src: string; darkMode: boolean; onClick: () => void }) {
-    const settings = useRecoilValue(settingsState);
+export default function BackgroundContainer(props: {
+    isFocus: boolean;
+    src: string;
+    darkMode: boolean;
+    onClick: () => void;
+}) {
+    const settings = useAtomValue(settingsAtom);
     if (validateColor(props.src)) {
         return (
             <div
@@ -16,7 +20,7 @@ export default function (props: { isFocus: boolean; src: string; darkMode: boole
         );
     } else if (validUrl.isWebUri(props.src)) {
         return (
-            <Image
+            <img
                 src={props.src}
                 className={
                     "w-full h-full fixed object-cover inset-0 duration-200 z-0 " +
@@ -24,7 +28,6 @@ export default function (props: { isFocus: boolean; src: string; darkMode: boole
                 }
                 alt="background"
                 onClick={props.onClick}
-                fill={true}
             />
         );
     } else {

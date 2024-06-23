@@ -1,12 +1,10 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { bgFocusState } from "./state/background";
+import { useAtom } from "jotai";
+import { bgFocusAtom } from "../lib/state/background";
 import BackgroundContainer from "./backgroundContainer";
 
-export default function () {
-    const [isFocus, setFocus] = useRecoilState(bgFocusState);
+export default function Background() {
+    const [isFocus, setFocus] = useAtom(bgFocusAtom);
     const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
@@ -23,8 +21,9 @@ export default function () {
             colorSchemeQueryList.removeEventListener("change", handleChange);
         };
     }, []);
+
     return (
-        <div suppressHydrationWarning>
+        <div>
             {darkMode ? (
                 <BackgroundContainer src="rgb(23,25,29)" isFocus={isFocus} onClick={() => setFocus(false)} darkMode={darkMode}/>
             ) : (

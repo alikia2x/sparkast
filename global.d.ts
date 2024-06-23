@@ -1,6 +1,6 @@
 import { Suggestion } from "search-engine-autocomplete";
 
-interface settingsType extends Object{
+interface settingsType extends object{
     "version": number,
     "elementBackdrop": boolean,
     "bgBlur": boolean,
@@ -10,9 +10,9 @@ interface settingsType extends Object{
     "searchEngines": {
         [key: string]: string
     },
-};
+}
 
-interface suggestionsResponse extends Object{
+interface suggestionsResponse extends object{
     suggestions: Suggestion[],
     query: string,
     verbatimRelevance: number,
