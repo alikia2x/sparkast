@@ -5,9 +5,11 @@ import { queryAtom } from "lib/state/query";
 import { selectedSuggestionAtom } from "lib/state/suggestionSelection";
 import handleEnter from "lib/onesearch/handleEnter";
 import { suggestionAtom } from "lib/state/suggestion";
+import { useTranslation } from "react-i18next";
 
 
 export default function Search(props: { onFocus: () => void }) {
+    const { t } = useTranslation();
     const settings = useAtomValue(settingsAtom);
     const [query, setQuery] = useAtom(queryAtom);
     const [selectedSuggestion, setSelected] = useAtom(selectedSuggestionAtom);
@@ -43,7 +45,7 @@ export default function Search(props: { onFocus: () => void }) {
                     dark:placeholder:text-slate-400 text-slate-900 dark:text-white"
                     id="searchBox"
                     type="text"
-                    placeholder="placeholder"
+                    placeholder={t('search.placeholder')}
                     onFocus={props.onFocus}
                     onKeyDown={handleKeydown}
                     onChange={(e) =>

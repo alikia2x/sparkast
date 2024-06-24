@@ -1,7 +1,7 @@
 {
     "name": "sparkhome",
     "private": false,
-    "version": "5.0.0",
+    "version": "5.1.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -10,9 +10,13 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "i18next": "^23.11.5",
+        "i18next-browser-languagedetector": "^8.0.0",
+        "i18next-icu": "^2.3.0",
         "jotai": "^2.8.3",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "react-i18next": "^14.1.2",
         "react-router": "^6.23.1",
         "react-router-dom": "^6.23.1",
         "search-engine-autocomplete": "^0.4.3",

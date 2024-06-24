@@ -38,7 +38,9 @@ export default function Time(props: {
             {formatTime()}{" "}
             <span className="text-lg leading-9 relative">
                 {new Intl.DateTimeFormat(navigator.language, {
-                    dateStyle: "medium"
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric"
                 }).format(currentTime)}
             </span>
         </div>
