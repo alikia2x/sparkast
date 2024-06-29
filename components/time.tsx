@@ -33,7 +33,7 @@ export default function Time(props: {
         <div
             className="absolute top-20 lg:top-44 short:top-0 translate-x-[-50%] 
             left-1/2 w-11/12 sm:w-[700px] text:black
-            dark:text-white text-3xl text-left text-shadow-lg z-10"
+            dark:text-white text-3xl text-left text-shadow-lg"
         >
             {formatTime()}{" "}
             <span className="text-lg leading-9 relative">
