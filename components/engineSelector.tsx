@@ -6,10 +6,8 @@ import { engineTranslation } from "lib/onesearch/translatedEngineList";
 import { settingsType } from "global";
 import { useAtomValue, useSetAtom } from "jotai";
 
-export default function EngineSelector(
-    props: { className: string }
-) {
-    const { t } = useTranslation("Search");
+export default function EngineSelector(props: { className: string }) {
+    const { t } = useTranslation();
     const settings: settingsType = useAtomValue(settingsAtom);
     const items = settings.searchEngines;
     const currentEngine: string = settings.currentSearchEngine;
@@ -19,10 +17,8 @@ export default function EngineSelector(
     const selectedValue = React.useMemo(() => Array.from(selectedKeys).join(", "), [selectedKeys]);
     const setSettings = useSetAtom(settingsAtom);
 
-    
-
     function getName(engineKey: string) {
-        return engineTranslation.includes(engineKey) ? t(`engine.${engineKey}`) : engineKey;
+        return engineTranslation.includes(engineKey) ? t(`search.engine.${engineKey}`) : engineKey;
     }
 
     useEffect(() => {
@@ -39,39 +35,29 @@ export default function EngineSelector(
         }
     }, [currentEngine, selectedValue, setSettings]);
 
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
     return (
         <div className={props.className}>
-            {
-            isClient &&
-            (
-                <Dropdown>
-                    <DropdownTrigger>
-                        <Button variant="bordered" className="capitalize">
-                            {displayEngine}
-                        </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                        aria-label={t("engine-aria")}
-                        variant="light"
-                        disallowEmptySelection
-                        selectionMode="single"
-                        selectedKeys={selectedKeys}
-                        onSelectionChange={setSelectedKeys}
-                    >
-                        {Object.keys(items).map((item) => (
-                            <DropdownItem key={item} suppressHydrationWarning>
-                                {getName(item)}
-                            </DropdownItem>
-                        ))}
-                    </DropdownMenu>
-                </Dropdown>
-            )}
+            <Dropdown>
+                <DropdownTrigger>
+                    <Button variant="bordered" className="capitalize">
+                        {displayEngine}
+                    </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                    aria-label={t("search.engine-aria")}
+                    variant="light"
+                    disallowEmptySelection
+                    selectionMode="single"
+                    selectedKeys={selectedKeys}
+                    onSelectionChange={setSelectedKeys}
+                >
+                    {Object.keys(items).map((item) => (
+                        <DropdownItem key={item} suppressHydrationWarning>
+                            {getName(item)}
+                        </DropdownItem>
+                    ))}
+                </DropdownMenu>
+            </Dropdown>
         </div>
     );
 }

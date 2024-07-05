@@ -1,5 +1,5 @@
 {
-    "Search": {
+    "search": {
         "placeholder": "Search or type a URL",
         "engine-aria": "Switch search engine",
         "engine": {
@@ -16,7 +16,7 @@
     "404": {
         "title": "Page Not Found"
     },
-    "About": {
+    "about": {
         "title": "SparkHome"
     },
     "tools": {
