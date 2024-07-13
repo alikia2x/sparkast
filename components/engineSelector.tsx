@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { settingsAtom } from "lib/state/settings";
 import { engineTranslation } from "lib/onesearch/translatedEngineList";
 import { settingsType } from "global";
 import { useAtomValue, useSetAtom } from "jotai";
+import Picker, { PickedItem } from "./picker";
 
 export default function EngineSelector(props: { className: string }) {
     const { t } = useTranslation();
     const settings: settingsType = useAtomValue(settingsAtom);
-    const items = settings.searchEngines;
+    const engines = settings.searchEngines;
     const currentEngine: string = settings.currentSearchEngine;
-    const displayEngine = getName(currentEngine);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [selectedKeys, setSelectedKeys] = useState(new Set([currentEngine]) as any);
-    const selectedValue = React.useMemo(() => Array.from(selectedKeys).join(", "), [selectedKeys]);
+    const [selected, setSelected] = useState(currentEngine);
     const setSettings = useSetAtom(settingsAtom);
+    let engineList: PickedItem = {};
+    for (const engineKey of Object.keys(engines)) {
+        engineList[engineKey] = getName(engineKey);
+    }
 
     function getName(engineKey: string) {
         return engineTranslation.includes(engineKey) ? t(`search.engine.${engineKey}`) : engineKey;
@@ -30,34 +31,20 @@ export default function EngineSelector(props: { className: string }) {
                 };
             });
         }
-        if (selectedValue !== currentEngine) {
-            setEngine(selectedValue);
+        if (selected !== currentEngine) {
+            setEngine(selected);
         }
-    }, [currentEngine, selectedValue, setSettings]);
+    }, [currentEngine, selected, setSettings]);
 
     return (
-        <div className={props.className}>
-            <Dropdown>
-                <DropdownTrigger>
-                    <Button variant="bordered" className="capitalize">
-                        {displayEngine}
-                    </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                    aria-label={t("search.engine-aria")}
-                    variant="light"
-                    disallowEmptySelection
-                    selectionMode="single"
-                    selectedKeys={selectedKeys}
-                    onSelectionChange={setSelectedKeys}
-                >
-                    {Object.keys(items).map((item) => (
-                        <DropdownItem key={item} suppressHydrationWarning>
-                            {getName(item)}
-                        </DropdownItem>
-                    ))}
-                </DropdownMenu>
-            </Dropdown>
-        </div>
+        <Picker
+            selectionItems={engineList}
+            selected={selected}
+            selectionOnChange={(selected) => {
+                setSelected(selected);
+            }}
+            displayContent={getName(selected)}
+            className={props.className}
+        />
     );
 }

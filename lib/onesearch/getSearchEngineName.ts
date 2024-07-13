@@ -12,6 +12,6 @@ export default function(){
 }
 
 function getName(engineKey: string) {
-    const { t } = useTranslation("Search");
-    return engineTranslation.includes(engineKey) ? t(`engine.${engineKey}`) : engineKey;
+    const { t } = useTranslation();
+    return engineTranslation.includes(engineKey) ? t(`search.engine.${engineKey}`) : engineKey;
 }

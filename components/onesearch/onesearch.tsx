@@ -23,11 +23,11 @@ export default function OneSearch() {
     const lastRequestTimeRef = useRef(0);
     const selected = useAtomValue(selectedSuggestionAtom);
     const settings = useAtomValue(settingsAtom);
-    const devMode = true;
+    const devMode = false;
     const query = useAtomValue(queryAtom);
     const engineName = getSearchEngineName();
     const engine = settings.currentSearchEngine;
-    const { t } = useTranslation("Search");
+    const { t } = useTranslation();
     const lang = i18next.language;
 
     useEffect(() => {
@@ -127,7 +127,7 @@ export default function OneSearch() {
                         <PlainSearch key={i} query={s.suggestion} selected={i == selected}>
                             {s.suggestion}&nbsp;
                             <span className="text-zinc-700 dark:text-zinc-400 text-sm">
-                                {t("search-help-text", { engine: engineName })}
+                                {t("search.search-help-text", { engine: engineName })}
                             </span>
                             {devMode && (
                                 <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">

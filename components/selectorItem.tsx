@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { selectionType } from "./selector";
+import { selectionType } from "./picker";
 
 export type selectedOnChange = (target: selectionType) => void;
 
