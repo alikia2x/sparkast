@@ -12,7 +12,7 @@ export default function Homepage() {
     const setBgFocus = useSetAtom(bgFocusAtom);
 
     return (
-        <div className="h-full fixed overflow-hidden w-full bg-black">
+        <div className="h-screen fixed overflow-hidden w-screen bg-black">
             <Background />
             <EngineSelector
                 className="absolute top-20 lg:top-44 short:top-0 translate-x-[-50%] translate-y-[-0.2rem]  
