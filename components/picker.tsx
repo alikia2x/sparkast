@@ -117,8 +117,8 @@ const PickerList = React.forwardRef<HTMLDivElement, PickerListProps>((props, ref
     return createPortal(
         <div
             ref={ref}
-            className="absolute w-fit text-white opacity-0 duration-200 
-            bg-gray-300 dark:bg-zinc-700 px-2 py-2 rounded-xl text-align-left scale-[.85]"
+            className="absolute w-fit text-black dark:text-white opacity-0 duration-200 
+            bg-zinc-50 shadow-lg border-1 border-zinc-200 dark:border-zinc-600 dark:bg-zinc-700 px-2 py-2 rounded-xl text-align-left scale-[.85]"
             style={{ transformOrigin: "top center" }}
         >
             {Object.keys(selectionItems).map((key: string, index) => {
@@ -126,7 +126,7 @@ const PickerList = React.forwardRef<HTMLDivElement, PickerListProps>((props, ref
                     <div
                         key={index}
                         className="relative py-2 w-full min-w-32 pl-2 cursor-pointer rounded-lg
-                                hover:bg-zinc-400 dark:hover:bg-zinc-600 flex justify-between items-center"
+                                hover:bg-zinc-200 dark:hover:bg-zinc-600 flex justify-between items-center"
                         onClick={() => {
                             selectionOnChange(key);
                             props.toggleDisplay();

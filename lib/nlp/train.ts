@@ -56,11 +56,6 @@ export async function trainIntentionModel() {
 
     await manager.train();
 
-    // let actual = await manager.process("en", "base64 decode bilibili");
-    // console.log(actual);
-    // let actualZH = await manager.process("zh", "去除百分号");
-    // console.log(actualZH);
-
     const resultModel = manager.toJSON();
 
     const buf = fflate.strToU8(JSON.stringify(resultModel));
