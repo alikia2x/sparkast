@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { bgFocusAtom } from "../lib/state/background";
 import BackgroundContainer from "./backgroundContainer";
+import useDarkMode from "lib/darkModeHook";
 
 export default function Background() {
     const [isFocus, setFocus] = useAtom(bgFocusAtom);
-    const [darkMode, setDarkMode] = useState(false);
-
-    useEffect(() => {
-        const colorSchemeQueryList = window.matchMedia("(prefers-color-scheme: dark)");
-        setDarkMode(colorSchemeQueryList.matches ? true : false);
-
-        const handleChange = () => {
-            setDarkMode(colorSchemeQueryList.matches ? true : false);
-        };
-
-        colorSchemeQueryList.addEventListener("change", handleChange);
-
-        return () => {
-            colorSchemeQueryList.removeEventListener("change", handleChange);
-        };
-    }, []);
+    
+    const darkMode = useDarkMode();
 
     return (
         <div>

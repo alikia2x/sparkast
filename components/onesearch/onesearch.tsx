@@ -36,7 +36,7 @@ export default function OneSearch() {
             cleanSuggestion("QUERY", "NAVIGATION");
             return;
         }
-        fetch(`/api/suggestion?q=${query}&l=${lang}&t=${time}&engine=${engine}`)
+        fetch(`/api/v1/suggestion?q=${query}&l=${lang}&t=${time}&engine=${engine}`)
             .then((res) => res.json())
             .then((data: suggestionsResponse) => {
                 try {

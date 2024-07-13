@@ -10,13 +10,6 @@ import { LangEn } from "@nlpjs/lang-en-min";
 import { LangZh } from "@nlpjs/lang-zh";
 import * as fflate from 'fflate';
 
-let zh: TrainData = {};
-let en: TrainData = {};
-
-type TrainData = {
-    [key: string]: string[];
-};
-
 export class NLU {
     manager: any;
     inited: boolean = false;
@@ -41,7 +34,6 @@ export class NLU {
         const modelText = fflate.strFromU8(decompressed);
         manager.fromJSON(JSON.parse(modelText));
         this.manager = manager;
-        // console.log(this.manager);
     }
     async init() {
         await this.loadIntentionModel();

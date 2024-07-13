@@ -1,7 +1,7 @@
 {
   "name": "sparkhome",
   "private": false,
-  "version": "5.2.3",
+  "version": "5.3.0",
   "type": "module",
   "scripts": {
     "dev": "bun server.ts",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@iconify/react": "^5.0.1",
     "@nextui-org/react": "^2.4.2",
+    "@types/bun": "^1.1.6",
     "@types/express": "^4.17.21",
     "cac": "^6.7.14",
     "chalk": "^5.3.0",
