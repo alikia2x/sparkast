@@ -13,8 +13,9 @@
         },
         "search-help-text": "Search {engine}"
     },
-    "404": {
-        "title": "Page Not Found"
+    "notfound": {
+        "title": "page not found",
+        "desc": "Please check if there is a typo in the URL. <br/>If SparkHome brought you to this page,<br/> please <a style=\"text-decoration:underline;\" href=\"mailto:contact@alikia2x.com\">contact us.</a>"
     },
     "about": {
         "title": "SparkHome"
