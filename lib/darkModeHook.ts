@@ -6,10 +6,10 @@ export default function useDarkMode() {
 
     useEffect(() => {
         const colorSchemeQueryList = window.matchMedia("(prefers-color-scheme: dark)");
-        setDarkMode(colorSchemeQueryList.matches ? true : false);
+        setDarkMode(colorSchemeQueryList.matches);
 
         const handleChange = () => {
-            setDarkMode(colorSchemeQueryList.matches ? true : false);
+            setDarkMode(colorSchemeQueryList.matches);
         };
 
         colorSchemeQueryList.addEventListener("change", handleChange);

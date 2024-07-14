@@ -33,12 +33,13 @@ export default function AboutPage() {
                 />
                 <Version
                     title="Backend API Version"
-                    version={"/v" + apiVersion}
+                    version={"/api/v" + apiVersion}
                     versionClass="bg-orange-500"
                 />
                 <p className="flex items-center my-3">
                     <span className="font-bold text-2xl mr-4 w-[36rem]">License</span>
-                    <span className="relative px-2 py-1 text-sm font-bold rounded-md text-nowrap underline bg-green-600">
+                    <span className="relative px-2 py-1 text-sm font-bold rounded-md text-nowrap underline
+                     bg-green-600 text-white">
                         <a href="/about/license">→ view</a>
                     </span>
                 </p>
@@ -58,7 +59,7 @@ function Version(props: { title: string; version: string; versionClass?: string 
             <span className="font-bold text-2xl mr-4 w-[36rem]">{props.title}</span>
             <span
                 className={
-                    "relative px-2 py-1 text-sm font-bold rounded-md text-nowrap " +
+                    "relative px-2 py-1 text-sm font-bold rounded-md text-nowrap text-white " +
                         props.versionClass ?? ""
                 }
             >
