@@ -1,5 +1,5 @@
-import punycode from "punycode";
-import { tldList } from "./tldList";
+import { toASCII } from "tr46";
+import { getTLD } from "./tldList";
 
 export default function validLink(link: string) {
     let finalURL;
@@ -28,8 +28,10 @@ export default function validLink(link: string) {
 }
 
 export function validTLD(domain: string): boolean {
-    const tld = punycode.toUnicode(domain.split(".").reverse()[0]);
-    if (tldList.includes(tld)) {
+    if (!domain.includes(".")) return false;
+    const tld = toASCII(domain.split(".").reverse()[0]);
+    const tldList = getTLD();
+    if (tldList.includes(tld.toUpperCase())) {
         return true;
     } else {
         return false;
