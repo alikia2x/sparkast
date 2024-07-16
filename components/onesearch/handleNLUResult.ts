@@ -14,8 +14,7 @@ export function handleNLUResult(result: any, updateSuggestion: UpdateSuggestionF
                 getWeather(data.latitude, data.longitude).then((weather) => {
                     console.log(weather["hourly"]);
                     let hourIndex = findClosestDateIndex(
-                        weather["hourly"]["time"],
-                        weather["utc_offset_seconds"]
+                        weather["hourly"]["time"]
                     );
                     let temp = weather["hourly"]["apparent_temperature"][hourIndex];
                     let weatherCode = weather["hourly"]["weather_code"][hourIndex];

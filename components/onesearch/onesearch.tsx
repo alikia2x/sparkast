@@ -11,15 +11,18 @@ import { selectedSuggestionAtom } from "lib/state/suggestionSelection";
 import { settingsAtom } from "lib/state/settings";
 import PlainText from "./plainText";
 import { sendError } from "lib/telemetering/sendError";
-import { NLU } from "lib/nlp/load";
 import { handleNLUResult } from "./handleNLUResult";
 import { useAtom, useAtomValue } from "jotai";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import { keywordSuggestion } from "lib/onesearch/keywordSuggestion";
+import { NLUType } from "lib/nlp/load";
 
 export default function OneSearch() {
     const [suggestion, setFinalSuggetsion] = useAtom(suggestionAtom);
     const [manager, setManager] = useState(null);
+    const [NLUModel, setNLUModel] = useState<NLUType>();
+    const [NLUModelLoaded, setNLUModelLoaded] = useState(false);
     const lastRequestTimeRef = useRef(0);
     const selected = useAtomValue(selectedSuggestionAtom);
     const settings = useAtomValue(settingsAtom);
@@ -83,20 +86,32 @@ export default function OneSearch() {
         });
     }
 
-    const NLUModel = new NLU();
+    (async function () {
+        const NLU = await import("lib/nlp/load");
+        const mainNLUModel = new NLU.NLU();
+        setNLUModel(mainNLUModel);
+        setNLUModelLoaded(true);
+    })();
 
     useEffect(() => {
-        NLUModel.init().then((nlu) => {
+        if (NLUModel === null || NLUModel === undefined) {
+            return;
+        }
+        NLUModel.init().then((nlu: typeof NLUModel) => {
             setManager(nlu.manager);
-            console.log(nlu.manager);
         });
-    }, []);
+    }, [NLUModelLoaded]);
 
     useEffect(() => {
-        cleanSuggestion("default-link", "default", "text");
+        cleanSuggestion("default-link", "default", "text", "link");
         if (validLink(query)) {
             updateSuggestion([
-                { type: "default-link", suggestion: query, relevance: 3000, prompt: <span>Go to: </span> },
+                {
+                    type: "default-link",
+                    suggestion: query,
+                    relevance: 3000,
+                    prompt: <span>Go to: </span>
+                },
                 { type: "default", suggestion: query, relevance: 1600 }
             ]);
         } else {
@@ -107,6 +122,10 @@ export default function OneSearch() {
                     relevance: 2000
                 }
             ]);
+        }
+
+        if (keywordSuggestion(query) !== null) {
+            updateSuggestion([keywordSuggestion(query)!]);
         }
 
         if (manager != null) {
@@ -147,10 +166,16 @@ export default function OneSearch() {
                             )}
                         </PlainSearch>
                     );
-                } else if (s.type === "NAVIGATION" || s.type === "default-link") {
+                } else if (
+                    s.type === "NAVIGATION" ||
+                    s.type === "default-link" ||
+                    s.type === "link"
+                ) {
                     return (
                         <Link key={i} query={s.suggestion} selected={i == selected}>
-                            {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
+                            {s.prompt && (
+                                <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>
+                            )}
                             {s.suggestion}
                             {devMode && (
                                 <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
@@ -162,7 +187,9 @@ export default function OneSearch() {
                 } else if (s.type === "text") {
                     return (
                         <PlainText key={i} selected={i == selected}>
-                            {s.prompt && <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>}
+                            {s.prompt && (
+                                <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>
+                            )}
                             <p>{s.suggestion}</p>
                             {devMode && (
                                 <span className="bottom-0 absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">

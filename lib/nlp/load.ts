@@ -10,6 +10,15 @@ import { LangEn } from "@nlpjs/lang-en-min";
 import { LangZh } from "@nlpjs/lang-zh";
 import * as fflate from 'fflate';
 
+export interface NLUType {
+    manager: any;
+    inited: boolean;
+    loadIntentionModel(): Promise<void>;
+    init(): Promise<this>;
+    process(lang: string, text: string): Promise<any>;
+}
+
+
 export class NLU {
     manager: any;
     inited: boolean = false;

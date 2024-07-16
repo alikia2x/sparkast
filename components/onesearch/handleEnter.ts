@@ -6,14 +6,14 @@ import search from "lib/search";
 export default function (
     index: number,
     suggestion: suggestionItem[],
-    query: string,
+    _query: string,
     settings: settingsType,
     searchBoxRef: React.RefObject<HTMLInputElement>
 ) {
     const selected = suggestion[index];
     const engine = settings.searchEngines[settings.currentSearchEngine];
     const newTab = settings.searchInNewTab;
-    let clipboard: any;
+    //let clipboard: any;
     if (selected.type === "QUERY" || selected.type === "default") {
         search(selected.suggestion, engine, newTab);
     } else if (selected.type === "NAVIGATION" || selected.type === "default-link") {

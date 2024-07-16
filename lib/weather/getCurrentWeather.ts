@@ -14,10 +14,9 @@ export function getClosestHourTimestamp(): string {
     return localHourTimestamp;
 }
 
-export function findClosestDateIndex(dates: string[], utc_offset_seconds: number): number {
+export function findClosestDateIndex(dates: string[]): number {
     const now = new Date();
     const nowTimestamp = now.getTime();
-    const offsetMilliseconds = utc_offset_seconds * 1000;
 
     let closestIndex = -1;
     let closestDiff = Infinity;
