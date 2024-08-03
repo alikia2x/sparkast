@@ -58,7 +58,7 @@ function Version(props: { title: string; version: string; versionClass?: string 
             <span
                 className={
                     "relative px-2 py-1 text-sm font-bold rounded-md text-nowrap text-white " +
-                        props.versionClass ?? ""
+                        props.versionClass || ""
                 }
             >
                 {props.version}

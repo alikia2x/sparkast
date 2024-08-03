@@ -6,7 +6,7 @@ import getSearchEngineName from "lib/onesearch/getSearchEngineName";
 import PlainSearch from "./plainSearch";
 import { suggestionAtom } from "lib/state/suggestion";
 import validLink from "lib/url/validLink";
-import Link from "./link";
+import LinkSuggestion from "./link";
 import { selectedSuggestionAtom } from "lib/state/suggestionSelection";
 import { settingsAtom } from "lib/state/settings";
 import PlainText from "./plainText";
@@ -86,12 +86,14 @@ export default function OneSearch() {
         });
     }
 
-    (async function () {
-        const NLU = await import("lib/nlp/load");
-        const mainNLUModel = new NLU.NLU();
-        setNLUModel(mainNLUModel);
-        setNLUModelLoaded(true);
-    })();
+    useEffect(() => {
+        (async function () {
+            const NLU = await import("lib/nlp/load");
+            const mainNLUModel = new NLU.NLU();
+            setNLUModel(mainNLUModel);
+            setNLUModelLoaded(true);
+        })();
+    }, []);
 
     useEffect(() => {
         if (NLUModel === null || NLUModel === undefined) {
@@ -172,7 +174,7 @@ export default function OneSearch() {
                     s.type === "link"
                 ) {
                     return (
-                        <Link key={i} query={s.suggestion} selected={i == selected}>
+                        <LinkSuggestion key={i} query={s.suggestion} selected={i == selected}>
                             {s.prompt && (
                                 <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>
                             )}
@@ -182,7 +184,7 @@ export default function OneSearch() {
                                     {s.relevance}
                                 </span>
                             )}
-                        </Link>
+                        </LinkSuggestion>
                     );
                 } else if (s.type === "text") {
                     return (
@@ -197,6 +199,25 @@ export default function OneSearch() {
                                 </span>
                             )}
                         </PlainText>
+                    );
+                } else if (s.type === "inpage-link") {
+                    return (
+                        <LinkSuggestion
+                            key={i}
+                            query={s.suggestion}
+                            selected={i == selected}
+                            inPage={true}
+                        >
+                            {s.prompt && (
+                                <span className="text-zinc-700 dark:text-zinc-400">{s.prompt}</span>
+                            )}
+                            {s.suggestion}
+                            {devMode && (
+                                <span className="absolute text-zinc-700 dark:text-zinc-400 text-sm leading-10 h-10 right-2">
+                                    {s.relevance}
+                                </span>
+                            )}
+                        </LinkSuggestion>
                     );
                 }
             })}

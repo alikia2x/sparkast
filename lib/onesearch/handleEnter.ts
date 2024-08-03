@@ -18,8 +18,11 @@ export default function (
     } else if (selected.type === "NAVIGATION" || selected.type === "default-link") {
         window.open(normalizeURL(selected.suggestion));
     } else if (selected.type === "text") {
-        console.log("????");
         copyToClipboard(selected.suggestion);
         searchBoxRef.current?.focus();
+    } else if (selected.type === "link") {
+        window.open(normalizeURL(selected.suggestion));
+    } else if (selected.type === "inpage-link") {
+        location.href = normalizeURL(selected.suggestion);
     }
 }
