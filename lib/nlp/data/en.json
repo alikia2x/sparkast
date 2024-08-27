@@ -124,6 +124,19 @@
         "Can you translate this HTML entity back to normal text? %s"
     ],
 
+    "ai.command": [
+        "write a typescript helloworld code",
+        "Check the following content for grammar and clarity",
+        "Help me study vocabulary: write a sentence for me to fill in the blank, and I'll try to pick the correct option.",
+        "Improve this markdown content in asepcts like grammar and expression, for a GitHub repo README.",
+        "can u think of a short name of my package",
+        "simplify this code"
+    ],
+
+    "ai.answer": [
+        "Which framework do you think is the most suitable for performance sensitive projects?"
+    ],
+
     "None": [
         "free weather api",
         "js get timezone",
