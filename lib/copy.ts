@@ -5,4 +5,4 @@ export default function copyToClipboard(value: string){
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
-};
+}

@@ -1,7 +1,9 @@
-import { CLIENT_VERSION } from "../version";
+import pjson from "package.json"
+
+const CLIENT_VERSION = pjson.version;
 
 export function sendError(error: Error) {
-    fetch("/api/error", {
+    fetch("/api/v1/error", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

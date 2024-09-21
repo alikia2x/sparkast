@@ -1,3 +1,8 @@
-export const SPARKHOME_VERSION="4.14.3";
-export const CLIENT_VERSION="4.14.2";
-export const NEXT_API_VERSION="4.14.3";
+import * as pjson from "package.json";
+
+export default function getVersion(){
+    return pjson.version;
+}
+
+export const clientNLUVersion = 2;
+export const apiVersion = 1;

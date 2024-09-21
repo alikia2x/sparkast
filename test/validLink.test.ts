@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import validLink, { validTLD } from "../lib/url/validLink";
 
-describe("Check if a string is an accessible domain/URL", () => {
+describe("Check if a string is an accessible domain/URL/IP", () => {
     test("Plain, full URL", () => {
         // Plain form
         expect(validLink("http://example.com")).toBe(true);
@@ -22,43 +22,56 @@ describe("Check if a string is an accessible domain/URL", () => {
     test("Invalid TLD with no protocol", () => {
         expect(validLink("www.example.notexist")).toBe(false);
     });
+    test("IPv4 without protocol", () => {
+        expect(validLink("127.0.0.1")).toBe(true);
+    });
+    test("IPv6 without protocol", () => {
+        expect(validLink("[::]")).toBe(true);
+    });
+    test("special test for 铜锣湾.chn.moe", () => {
+        expect(validLink("铜锣湾.chn.moe")).toBe(true);
+    });
+    test("Not a valid host/URL.", () => {
+        expect(validLink("weather")).toBe(false);
+    });
 });
 
 // Reference: https://www.iana.org/domains/root/db
 describe("Check if the given TLD exist and assigned.", () => {
     test("Valid normal TLD", () => {
-        expect(validTLD("com")).toBe(true);
-        expect(validTLD("top")).toBe(true);
-        expect(validTLD("net")).toBe(true);
-        expect(validTLD("org")).toBe(true);
+        expect(validTLD("example.com")).toBe(true);
+        expect(validTLD("example.top")).toBe(true);
+        expect(validTLD("example.net")).toBe(true);
+        expect(validTLD("example.org")).toBe(true);
     });
     test("Valid new TLDs", () => {
         // they really exist!
-        expect(validTLD("foo")).toBe(true);
-        expect(validTLD("bar")).toBe(true);
+        expect(validTLD("example.foo")).toBe(true);
+        expect(validTLD("example.bar")).toBe(true);
+        expect(validTLD('example.zip')).toBe(true);
     });
     test("Exist but not assigned TLD", () => {
-        expect(validTLD("active")).toBe(false);
-        expect(validTLD("off")).toBe(false);
+        expect(validTLD("example.active")).toBe(false);
+        expect(validTLD("example.off")).toBe(false);
     });
     test("with dot", () => {
-        expect(validTLD(".com")).toBe(true);
-        expect(validTLD(".us")).toBe(true);
-        expect(validTLD(".cn")).toBe(true);
-        expect(validTLD(".io")).toBe(true);
+        expect(validTLD("example.com")).toBe(true);
+        expect(validTLD("example.us")).toBe(true);
+        expect(validTLD("example.cn")).toBe(true);
+        expect(validTLD("example.io")).toBe(true);
     });
     test("Punycode TLDs", () => {
-        expect(validTLD(".中国")).toBe(true);
-        expect(validTLD(".РФ")).toBe(true);
-        expect(validTLD(".कॉम")).toBe(true);
-        expect(validTLD("ایران")).toBe(true);
-        expect(validTLD("இலங்கை")).toBe(true);
-        expect(validTLD("გე")).toBe(true);
-        expect(validTLD("ポイント")).toBe(true);
+        expect(validTLD("example.中国")).toBe(true);
+        expect(validTLD("example.РФ")).toBe(true);
+        expect(validTLD("example.कॉम")).toBe(true);
+        expect(validTLD("example.ایران")).toBe(true);
+        expect(validTLD("example.இலங்கை")).toBe(true);
+        expect(validTLD("example.გე")).toBe(true);
+        expect(validTLD("example.ポイント")).toBe(true);
     });
     test("Punycode TLDs but not assigned", () => {
-        expect(validTLD("テスト")).toBe(false);
-        expect(validTLD("परीक्षा")).toBe(false);
-        expect(validTLD("测试")).toBe(false);
+        expect(validTLD("example.テスト")).toBe(false);
+        expect(validTLD("example.परीक्षा")).toBe(false);
+        expect(validTLD("example.测试")).toBe(false);
     });
 });
