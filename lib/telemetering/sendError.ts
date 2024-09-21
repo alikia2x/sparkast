@@ -1,21 +1,21 @@
-import pjson from "package.json"
+import pjson from "package.json";
 
 const CLIENT_VERSION = pjson.version;
 
 export function sendError(error: Error) {
-    fetch("/api/v1/error", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message: error.message,
-            name: error.name,
-            time: new Date().getTime()/1000,
-            version: CLIENT_VERSION,
-            ua: navigator.userAgent,
-            cause: error.cause,
-            stack: error.stack
-        })
-    })
+	fetch("/api/v1/error", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			message: error.message,
+			name: error.name,
+			time: new Date().getTime() / 1000,
+			version: CLIENT_VERSION,
+			ua: navigator.userAgent,
+			cause: error.cause,
+			stack: error.stack
+		})
+	});
 }

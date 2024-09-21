@@ -2,22 +2,22 @@ import { useState, useEffect } from "react";
 
 // Custom React Hook for dark mode detect
 export default function useDarkMode() {
-    const [darkMode, setDarkMode] = useState(false);
+	const [darkMode, setDarkMode] = useState(false);
 
-    useEffect(() => {
-        const colorSchemeQueryList = window.matchMedia("(prefers-color-scheme: dark)");
-        setDarkMode(colorSchemeQueryList.matches);
+	useEffect(() => {
+		const colorSchemeQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+		setDarkMode(colorSchemeQueryList.matches);
 
-        const handleChange = () => {
-            setDarkMode(colorSchemeQueryList.matches);
-        };
+		const handleChange = () => {
+			setDarkMode(colorSchemeQueryList.matches);
+		};
 
-        colorSchemeQueryList.addEventListener("change", handleChange);
+		colorSchemeQueryList.addEventListener("change", handleChange);
 
-        return () => {
-            colorSchemeQueryList.removeEventListener("change", handleChange);
-        };
-    }, []);
+		return () => {
+			colorSchemeQueryList.removeEventListener("change", handleChange);
+		};
+	}, []);
 
-    return darkMode;
+	return darkMode;
 }

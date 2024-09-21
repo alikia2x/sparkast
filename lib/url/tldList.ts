@@ -1,5 +1,5 @@
-import TLDtxt from "./tlds.txt?raw"
+import TLDtxt from "./tlds.txt?raw";
 
-export function getTLD(){
-    return TLDtxt.split("\n").filter((line) => line[0] !== "#")
+export function getTLD() {
+	return TLDtxt.split("\n").filter((line) => line[0] !== "#");
 }

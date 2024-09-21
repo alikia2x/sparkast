@@ -1,5 +1,5 @@
 {
-  "search" : {
-    "placeholder" : "Искать или ввести URL"
-  }
+	"search": {
+		"placeholder": "Искать или ввести URL"
+	}
 }

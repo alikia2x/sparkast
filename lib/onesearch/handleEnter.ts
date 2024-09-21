@@ -4,25 +4,25 @@ import { normalizeURL } from "lib/normalizeURL";
 import search from "lib/search";
 
 export default function (
-    index: number,
-    suggestion: suggestionItem[],
-    _query: string,
-    settings: settingsType,
-    searchBoxRef: React.RefObject<HTMLInputElement>
+	index: number,
+	suggestion: suggestionItem[],
+	_query: string,
+	settings: settingsType,
+	searchBoxRef: React.RefObject<HTMLInputElement>
 ) {
-    const selected = suggestion[index];
-    const engine = settings.searchEngines[settings.currentSearchEngine];
-    const newTab = settings.searchInNewTab;
-    if (selected.type === "QUERY" || selected.type === "default") {
-        search(selected.suggestion, engine, newTab);
-    } else if (selected.type === "NAVIGATION" || selected.type === "default-link") {
-        window.open(normalizeURL(selected.suggestion));
-    } else if (selected.type === "text") {
-        copyToClipboard(selected.suggestion);
-        searchBoxRef.current?.focus();
-    } else if (selected.type === "link") {
-        window.open(normalizeURL(selected.suggestion));
-    } else if (selected.type === "inpage-link") {
-        location.href = normalizeURL(selected.suggestion);
-    }
+	const selected = suggestion[index];
+	const engine = settings.searchEngines[settings.currentSearchEngine];
+	const newTab = settings.searchInNewTab;
+	if (selected.type === "QUERY" || selected.type === "default") {
+		search(selected.suggestion, engine, newTab);
+	} else if (selected.type === "NAVIGATION" || selected.type === "default-link") {
+		window.open(normalizeURL(selected.suggestion));
+	} else if (selected.type === "text") {
+		copyToClipboard(selected.suggestion);
+		searchBoxRef.current?.focus();
+	} else if (selected.type === "link") {
+		window.open(normalizeURL(selected.suggestion));
+	} else if (selected.type === "inpage-link") {
+		location.href = normalizeURL(selected.suggestion);
+	}
 }
