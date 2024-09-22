@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "bun:test";
 import validLink, { validTLD } from "../lib/url/validLink";
 
 describe("Check if a string is an accessible domain/URL/IP", () => {
