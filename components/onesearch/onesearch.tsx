@@ -17,6 +17,8 @@ import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { keywordSuggestion } from "lib/onesearch/keywordSuggestion";
 import { NLUType } from "lib/nlp/load";
+import tokenize from "lib/nlp/tokenizer";
+import { getEmbedding, getEmbeddingLayer } from "lib/nlp/getEmbedding";
 
 export default function OneSearch() {
 	const [suggestion, setFinalSuggetsion] = useAtom(suggestionAtom);
@@ -103,6 +105,24 @@ export default function OneSearch() {
 			setManager(nlu.manager);
 		});
 	}, [NLUModelLoaded]);
+
+	// Real test for tokenizing & embedding
+	// It works.
+	// useEffect(() => {
+	// 	(async function () {
+	// 		const result = await tokenize("你好", "Qwen/Qwen2.5-3B", true, false);
+	// 	})();
+	// }, []);
+	
+	// useEffect(() => {
+	// 	const embedding_file = "/models/token_embeddings.bin";
+	// 	(async function () {
+	// 		const result = await fetch(embedding_file);
+	// 		const arrBuf = await result.arrayBuffer();
+	// 		const embeddingDict = getEmbeddingLayer(arrBuf);
+	// 		const e = getEmbedding([108386], embeddingDict, 12);
+	// 	})();
+	// }, []);
 
 	useEffect(() => {
 		cleanSuggestion("default-link", "default", "text", "link");

@@ -1,9 +1,12 @@
 import { AutoTokenizer, env } from "@xenova/transformers";
 
-env.allowRemoteModels = false;
-env.localModelPath = "/transformers/";
-
-async function tokenize(text: string, model: string) {
+async function tokenize(text: string, model: string, mirror: boolean = false, remote: boolean = true) {
+	if (mirror) {
+		env.remoteHost = "https://hf-mirror.com";
+	}
+	if (!remote) {
+		env.allowRemoteModels = false;
+	}
 	const tokenizer = await AutoTokenizer.from_pretrained(model);
 	const { input_ids } = await tokenizer(text);
 	const tokenIds = [];
