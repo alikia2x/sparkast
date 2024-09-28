@@ -16,15 +16,15 @@ export default function validLink(link: string) {
 			return false;
 		}
 	}
+	if (finalURL.host.endsWith(".")) return false;
 	if (
 		validTLD(finalURL.host) ||
-		isValidIPv6(finalURL.host.slice(1, finalURL.host.length - 1)) ||
-		isValidIPv4(finalURL.host)
+		isValidIPv6(link.slice(1, finalURL.host.length - 1)) ||
+		isValidIPv4(link)
 	) {
 		return true;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 export function validTLD(domain: string): boolean {

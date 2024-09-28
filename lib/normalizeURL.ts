@@ -1,7 +1,7 @@
-export function normalizeURL(input: string): string {
+export function normalizeURL(input: string, absolute: boolean = true): string {
 	try {
 		// try to create a URL object
-		const url = new URL(input, window.location.href);
+		const url = absolute ? new URL(input) : new URL(input, window.location.href);
 		// if the URL is valid, return it
 		return url.href;
 	} catch (error) {

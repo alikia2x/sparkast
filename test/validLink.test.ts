@@ -26,6 +26,10 @@ describe("Check if a string is an accessible domain/URL/IP", () => {
 	test("Invalid TLD with no protocol", () => {
 		expect(validLink("www.example.notexist")).toBe(false);
 	});
+	test("Dot suffix", () => {
+		expect(validLink(".")).toBe(false);
+		expect(validLink("anything.")).toBe(false);
+	});
 	test("IPv4 without protocol", () => {
 		expect(validLink("127.0.0.1")).toBe(true);
 	});
@@ -37,6 +41,9 @@ describe("Check if a string is an accessible domain/URL/IP", () => {
 	});
 	test("Not a valid host/URL.", () => {
 		expect(validLink("weather")).toBe(false);
+	});
+	test("Not a valid IP", () => {
+		expect(validLink("1")).toBe(false);
 	});
 });
 
