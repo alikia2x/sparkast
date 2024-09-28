@@ -12,19 +12,22 @@ import { settingsAtom } from "lib/state/settings";
 import PlainText from "./plainText";
 import { sendError } from "lib/telemetering/sendError";
 import { handleNLUResult } from "./handleNLUResult";
+import * as ort from 'onnxruntime-web';
 import { useAtom, useAtomValue } from "jotai";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { keywordSuggestion } from "lib/onesearch/keywordSuggestion";
-import { NLUType } from "lib/nlp/load";
 import tokenize from "lib/nlp/tokenizer";
 import { getEmbedding, getEmbeddingLayer } from "lib/nlp/getEmbedding";
 
+interface EmbeddingLayer {
+	[key: number]: Float32Array<ArrayBufferLike>;
+}
+
 export default function OneSearch() {
 	const [suggestion, setFinalSuggetsion] = useAtom(suggestionAtom);
-	const [manager, setManager] = useState(null);
-	const [NLUModel, setNLUModel] = useState<NLUType>();
-	const [NLUModelLoaded, setNLUModelLoaded] = useState(false);
+	const [embeddingLayer, setEmbeddingLayer] = useState<EmbeddingLayer | null>(null);
+	const [NLUsession, setNLUsession] = useState<ort.InferenceSession | null>(null);
 	const lastRequestTimeRef = useRef(0);
 	const selected = useAtomValue(selectedSuggestionAtom);
 	const settings = useAtomValue(settingsAtom);
@@ -89,40 +92,41 @@ export default function OneSearch() {
 	}
 
 	useEffect(() => {
+		if (embeddingLayer !== null) return;
+		const embedding_file = "/models/token_embeddings.bin";
 		(async function () {
-			const NLU = await import("lib/nlp/load");
-			const mainNLUModel = new NLU.NLU();
-			setNLUModel(mainNLUModel);
-			setNLUModelLoaded(true);
+			const result = await fetch(embedding_file);
+			const arrBuf = await result.arrayBuffer();
+			const embeddingDict = getEmbeddingLayer(arrBuf);
+			setEmbeddingLayer(embeddingDict);
+
+			 await loadModel("/models/NLU.onnx");
+			// if (!modelLoaded) {
+			// 	console.error("NLU model was not correctly loaded.")
+			// }
 		})();
+		
 	}, []);
 
-	useEffect(() => {
-		if (NLUModel === null || NLUModel === undefined) {
-			return;
-		}
-		NLUModel.init().then((nlu: typeof NLUModel) => {
-			setManager(nlu.manager);
-		});
-	}, [NLUModelLoaded]);
+	async function loadModel(modelPath: string) {
+		ort.env.wasm.wasmPaths = "/onnx/"
+		const session = await ort.InferenceSession.create(modelPath);
+		setNLUsession(session);
+	}
 
-	// Real test for tokenizing & embedding
-	// It works.
-	// useEffect(() => {
-	// 	(async function () {
-	// 		const result = await tokenize("你好", "Qwen/Qwen2.5-3B", true, false);
-	// 	})();
-	// }, []);
-	
-	// useEffect(() => {
-	// 	const embedding_file = "/models/token_embeddings.bin";
-	// 	(async function () {
-	// 		const result = await fetch(embedding_file);
-	// 		const arrBuf = await result.arrayBuffer();
-	// 		const embeddingDict = getEmbeddingLayer(arrBuf);
-	// 		const e = getEmbedding([108386], embeddingDict, 12);
-	// 	})();
-	// }, []);
+	async function getNLUResult(query: string) {
+		const start = new Date().getTime();
+		if (embeddingLayer === null || NLUsession === null) return;
+		const tokenIds = await tokenize(query, "Qwen/Qwen2.5-3B");
+		console.log(new Date().getTime() - start, "ms");
+		const embeddings = getEmbedding(tokenIds, embeddingLayer, 64);
+		const inputTensor = new ort.Tensor("float32", embeddings, [1, 64, 96]);
+		const feeds = { input: inputTensor };
+		console.log(new Date().getTime() - start, "ms");
+		const results = await NLUsession.run(feeds);
+		console.log(new Date().getTime() - start, "ms");
+		return results;
+	}
 
 	useEffect(() => {
 		cleanSuggestion("default-link", "default", "text", "link");
@@ -150,13 +154,10 @@ export default function OneSearch() {
 			updateSuggestion([keywordSuggestion(query)!]);
 		}
 
-		if (manager != null) {
-			// @ts-ignore
-			manager.process(query).then((result) => {
-				console.log(result);
-				handleNLUResult(result, updateSuggestion);
-			});
-		}
+		(async function () {
+			const result = await getNLUResult(query);
+			console.log(result);
+		})();
 	}, [query, engineName]);
 
 	return (

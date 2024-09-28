@@ -1,5 +1,10 @@
 {
-	"search": {
-		"placeholder": "ابحث أو اكتب عنوان URL"
-	}
+  "search": {
+    "placeholder": "ابحث أو اكتب عنوان URL"
+  },
+  "about": {
+    "license": {
+      "view": "← عرض"
+    }
+  }
 }

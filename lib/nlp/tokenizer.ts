@@ -1,6 +1,11 @@
 import { AutoTokenizer, env } from "@xenova/transformers";
 
-async function tokenize(text: string, model: string, mirror: boolean = false, remote: boolean = true) {
+async function tokenize(
+	text: string,
+	model: string,
+	mirror: boolean = false,
+	remote: boolean = true
+) {
 	if (mirror) {
 		env.remoteHost = "https://hf-mirror.com";
 	}
