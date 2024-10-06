@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import tokenize from "../lib/nlp/tokenizer";
+import tokenize from "../lib/nlp/tokenize/tokenizer";
 
 describe("Test if tokenizer works", () => {
 	test("Using without a mirror", async () => {

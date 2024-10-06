@@ -17,8 +17,10 @@ import { useAtom, useAtomValue } from "jotai";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { keywordSuggestion } from "lib/onesearch/keywordSuggestion";
-import tokenize from "lib/nlp/tokenizer";
+import tokenize from "lib/nlp/tokenize/tokenizer";
 import { getEmbedding, getEmbeddingLayer } from "lib/nlp/getEmbedding";
+import { loadVocab } from "lib/nlp/tokenize/loadVocab";
+import BPETokenizer from "lib/nlp/tokenize/BPEtokenizer";
 
 interface EmbeddingLayer {
 	[key: number]: Float32Array<ArrayBufferLike>;
@@ -28,6 +30,7 @@ export default function OneSearch() {
 	const [suggestion, setFinalSuggetsion] = useAtom(suggestionAtom);
 	const [embeddingLayer, setEmbeddingLayer] = useState<EmbeddingLayer | null>(null);
 	const [NLUsession, setNLUsession] = useState<ort.InferenceSession | null>(null);
+	const [tokenizer, setTokenizer] = useState<BPETokenizer | null>(null);
 	const lastRequestTimeRef = useRef(0);
 	const selected = useAtomValue(selectedSuggestionAtom);
 	const settings = useAtomValue(settingsAtom);
@@ -93,19 +96,27 @@ export default function OneSearch() {
 
 	useEffect(() => {
 		if (embeddingLayer !== null) return;
-		const embedding_file = "/models/token_embeddings.bin";
+		const embedding_file = "/model/token_embeddings.bin";
 		(async function () {
 			const result = await fetch(embedding_file);
 			const arrBuf = await result.arrayBuffer();
 			const embeddingDict = getEmbeddingLayer(arrBuf);
 			setEmbeddingLayer(embeddingDict);
 
-			await loadModel("/models/NLU.onnx");
+			await loadModel("/model/NLU.onnx");
 			// if (!modelLoaded) {
 			// 	console.error("NLU model was not correctly loaded.")
 			// }
 		})();
 	}, []);
+
+
+	useEffect(() => {
+		if (tokenizer !== null) return;
+		(async function () {
+			await loadTokenizer();
+		})();
+	},[]);
 
 	async function loadModel(modelPath: string) {
 		ort.env.wasm.wasmPaths = "/onnx/";
@@ -113,10 +124,16 @@ export default function OneSearch() {
 		setNLUsession(session);
 	}
 
+	async function loadTokenizer() {
+		const vocab = await loadVocab();
+		const tokenizer = new BPETokenizer(vocab);
+		setTokenizer(tokenizer);
+	}
+
 	async function getNLUResult(query: string) {
 		const start = new Date().getTime();
-		if (embeddingLayer === null || NLUsession === null) return;
-		const tokenIds = await tokenize(query, "Qwen/Qwen2.5-3B");
+		if (embeddingLayer === null || NLUsession === null || tokenizer == null) return;
+		const tokenIds = await tokenize(query, tokenizer);
 		console.log(new Date().getTime() - start, "ms");
 		const embeddings = getEmbedding(tokenIds, embeddingLayer, 64);
 		const inputTensor = new ort.Tensor("float32", embeddings, [1, 64, 96]);

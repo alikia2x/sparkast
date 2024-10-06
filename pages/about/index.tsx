@@ -48,8 +48,8 @@ export default function AboutPage() {
 			</p>
 
 			<p className="relative font-bold text-2xl mt-12">Presented By</p>
-			{!darkMode && <img src="/LuminaraStudio.png" className="relative md:h-64 mt-6" />}
-			{darkMode && <img src="/LuminaraStudioDark.png" className="relative md:h-56 mt-6" />}
+			{!darkMode && <img src="/assets/img/LuminaraStudio.png" className="relative md:h-64 mt-6" />}
+			{darkMode && <img src="/assets/img/LuminaraStudioDark.png" className="relative md:h-56 mt-6" />}
 		</AboutLayout>
 	);
 }
