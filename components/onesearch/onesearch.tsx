@@ -12,7 +12,7 @@ import { settingsAtom } from "lib/state/settings";
 import PlainText from "./plainText";
 import { sendError } from "lib/telemetering/sendError";
 import { handleNLUResult } from "./handleNLUResult";
-import * as ort from 'onnxruntime-web';
+import * as ort from "onnxruntime-web";
 import { useAtom, useAtomValue } from "jotai";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
@@ -100,16 +100,15 @@ export default function OneSearch() {
 			const embeddingDict = getEmbeddingLayer(arrBuf);
 			setEmbeddingLayer(embeddingDict);
 
-			 await loadModel("/models/NLU.onnx");
+			await loadModel("/models/NLU.onnx");
 			// if (!modelLoaded) {
 			// 	console.error("NLU model was not correctly loaded.")
 			// }
 		})();
-		
 	}, []);
 
 	async function loadModel(modelPath: string) {
-		ort.env.wasm.wasmPaths = "/onnx/"
+		ort.env.wasm.wasmPaths = "/onnx/";
 		const session = await ort.InferenceSession.create(modelPath);
 		setNLUsession(session);
 	}

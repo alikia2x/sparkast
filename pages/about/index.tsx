@@ -15,7 +15,10 @@ export default function AboutPage() {
 					<span className="leading-7 md:leading-9 text-3xl font-bold">sparkast</span>
 					<p className="mt-2 leading-5 text-base md:text-xl">
 						Made with <span className="text-red-500">♥️</span> by
-						<a className="underline decoration-dotted text-red-500 mx-1" href="https://alikia2x.com">
+						<a
+							className="underline decoration-dotted text-red-500 mx-1"
+							href="https://alikia2x.com"
+						>
 							alikia2x
 						</a>
 						from Luminara Studio
@@ -40,7 +43,7 @@ export default function AboutPage() {
 					className="relative px-2 py-1 text-sm font-bold rounded-md text-nowrap underline
                      bg-green-600 text-white"
 				>
-					<a href="/about/license">{t('about.license.view')}</a>
+					<a href="/about/license">{t("about.license.view")}</a>
 				</span>
 			</p>
 

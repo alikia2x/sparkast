@@ -1,39 +1,39 @@
 {
-  "404": {
-    "title": "Page not found"
-  },
-  "search": {
-    "placeholder": "Search or type a URL",
-    "engine-aria": "Switch search engine",
-    "engine": {
-      "google": "Google",
-      "baidu": "Baidu",
-      "bing": "Bing",
-      "duckduckgo": "DuckDuckGo",
-      "yandex": "Yandex",
-      "yahoo": "Yahoo",
-      "ecosia": "Ecosia"
-    },
-    "search-help-text": "Search {engine}"
-  },
-  "notfound": {
-    "title": "page not found",
-    "desc": "Please check if there is a typo in the URL. <br/>If SparkHome brought you to this page,<br/> please <a style=\"text-decoration:underline;\" href=\"mailto:contact@alikia2x.com\">contact us.</a>"
-  },
-  "tools": {
-    "base64": {
-      "title": "Base64 tools - LuminaraUtils",
-      "decode": "Decode",
-      "encode": "Encode",
-      "result": "Result: ",
-      "copy": "Copy",
-      "copied": "Copied"
-    }
-  },
-  "about": {
-    "title": "About sparkast",
-    "license": {
-      "view": "→ view"
-    }
-  }
+	"404": {
+		"title": "Page not found"
+	},
+	"search": {
+		"placeholder": "Search or type a URL",
+		"engine-aria": "Switch search engine",
+		"engine": {
+			"google": "Google",
+			"baidu": "Baidu",
+			"bing": "Bing",
+			"duckduckgo": "DuckDuckGo",
+			"yandex": "Yandex",
+			"yahoo": "Yahoo",
+			"ecosia": "Ecosia"
+		},
+		"search-help-text": "Search {engine}"
+	},
+	"notfound": {
+		"title": "page not found",
+		"desc": "Please check if there is a typo in the URL. <br/>If SparkHome brought you to this page,<br/> please <a style=\"text-decoration:underline;\" href=\"mailto:contact@alikia2x.com\">contact us.</a>"
+	},
+	"tools": {
+		"base64": {
+			"title": "Base64 tools - LuminaraUtils",
+			"decode": "Decode",
+			"encode": "Encode",
+			"result": "Result: ",
+			"copy": "Copy",
+			"copied": "Copied"
+		}
+	},
+	"about": {
+		"title": "About sparkast",
+		"license": {
+			"view": "→ view"
+		}
+	}
 }

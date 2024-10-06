@@ -1,14 +1,14 @@
 {
-  "search": {
-    "engine-aria": "検索エンジンを切り替える",
-    "engine": {
-      "google": "Google"
-    },
-    "placeholder": "検索またはURLを入力"
-  },
-  "about": {
-    "license": {
-      "view": "→ 見る"
-    }
-  }
+	"search": {
+		"engine-aria": "検索エンジンを切り替える",
+		"engine": {
+			"google": "Google"
+		},
+		"placeholder": "検索またはURLを入力"
+	},
+	"about": {
+		"license": {
+			"view": "→ 見る"
+		}
+	}
 }
