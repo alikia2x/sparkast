@@ -23,6 +23,7 @@ import { loadVocab } from "lib/nlp/tokenize/loadVocab";
 import BPETokenizer from "lib/nlp/tokenize/BPEtokenizer";
 import energyScore from "lib/nlp/energyScore";
 import bytesToUnicode from "lib/nlp/tokenize/bytesToUnicode";
+import { searchboxLastInputAtom } from "lib/state/searchboxLastInput";
 
 interface EmbeddingLayer {
 	[key: number]: Float32Array<ArrayBufferLike>;
@@ -33,6 +34,7 @@ export default function OneSearch() {
 	const [embeddingLayer, setEmbeddingLayer] = useState<EmbeddingLayer | null>(null);
 	const [NLUsession, setNLUsession] = useState<ort.InferenceSession | null>(null);
 	const [tokenizer, setTokenizer] = useState<BPETokenizer | null>(null);
+	const lastInput = useAtomValue(searchboxLastInputAtom);
 	const lastRequestTimeRef = useRef(0);
 	const selected = useAtomValue(selectedSuggestionAtom);
 	const settings = useAtomValue(settingsAtom);
@@ -69,7 +71,7 @@ export default function OneSearch() {
 				// Handle fetch error
 				sendError(error);
 			});
-	}, [query]);
+	}, [lastInput]);
 
 	function updateSuggestion(data: suggestionItem[]) {
 		setFinalSuggetsion((cur: suggestionItem[]) => {
@@ -177,7 +179,7 @@ export default function OneSearch() {
 			}
 			console.log(data, energyScore(data));
 		})();
-	}, [query, engineName]);
+	}, [lastInput, engineName]);
 
 	return (
 		<SuggestionBox>

@@ -6,12 +6,14 @@ import { selectedSuggestionAtom } from "lib/state/suggestionSelection";
 import handleEnter from "lib/onesearch/handleEnter";
 import { suggestionAtom } from "lib/state/suggestion";
 import { useTranslation } from "react-i18next";
+import { searchboxLastInputAtom } from "lib/state/searchboxLastInput";
 
 export default function Search(props: { onFocus: () => void }) {
 	const { t } = useTranslation();
 	const settings = useAtomValue(settingsAtom);
 	const [query, setQuery] = useAtom(queryAtom);
 	const [selectedSuggestion, setSelected] = useAtom(selectedSuggestionAtom);
+	const [_, setLastInput] = useAtom(searchboxLastInputAtom)
 	const suggestions = useAtomValue(suggestionAtom);
 	const searchBoxRef = useRef<HTMLInputElement>(null);
 
@@ -25,11 +27,21 @@ export default function Search(props: { onFocus: () => void }) {
 		} else if (e.key == "ArrowUp") {
 			e.preventDefault();
 			const len = suggestions.length;
-			setSelected((selectedSuggestion - 1 + len) % len);
+			const lastSelectedIndex = (selectedSuggestion - 1 + len) % len;
+			const lastSuggeston = suggestions[lastSelectedIndex];
+			setSelected(lastSelectedIndex);
+			if (["QUERY", "NAVIGATION", "default"].includes(lastSuggeston.type)) {
+				setQuery(lastSuggeston.suggestion);
+			}
 		} else if (e.key == "ArrowDown") {
 			e.preventDefault();
 			const len = suggestions.length;
-			setSelected((selectedSuggestion + 1) % len);
+			const nextSelectedIndex = (selectedSuggestion + 1 + len) % len;
+			const nextSuggeston = suggestions[nextSelectedIndex];
+			setSelected(nextSelectedIndex);
+			if (["QUERY", "NAVIGATION", "default"].includes(nextSuggeston.type)) {
+				setQuery(nextSuggeston.suggestion);
+			}
 		}
 	}
 
@@ -48,11 +60,10 @@ export default function Search(props: { onFocus: () => void }) {
 					placeholder={t("search.placeholder")}
 					onFocus={props.onFocus}
 					onKeyDown={handleKeydown}
-					onChange={(e) =>
-						setQuery(() => {
-							return e.target.value;
-						})
-					}
+					onChange={(e) => {
+						setLastInput(new Date().getTime());
+						setQuery(() => e.target.value);
+					}}
 					autoComplete="off"
 					autoCorrect="off"
 					autoCapitalize="off"
