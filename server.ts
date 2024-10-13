@@ -6,7 +6,7 @@ import { networkInterfaces } from "os";
 import cac from "cac";
 import { configureBackendRoutes } from "./backend/route";
 import { Server, IncomingMessage, ServerResponse } from "http";
-import { getLocalhostAddressIfDiffersFromDNS, wildcardHosts } from "lib/server/startScript";
+import { getLocalhostAddressIfDiffersFromDNS, wildcardHosts } from "./lib/server/startScript";
 
 async function helloMessage() {
 	const { base } = await ViteExpress.getViteConfig();
