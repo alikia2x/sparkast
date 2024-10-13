@@ -1,81 +1,81 @@
 class TrieNode {
-    children: Map<string, TrieNode>;
-    tokenId: number | null;
+	children: Map<string, TrieNode>;
+	tokenId: number | null;
 
-    constructor() {
-        this.children = new Map();
-        this.tokenId = null;
-    }
+	constructor() {
+		this.children = new Map();
+		this.tokenId = null;
+	}
 }
 
 class Trie {
-    root: TrieNode;
+	root: TrieNode;
 
-    constructor() {
-        this.root = new TrieNode();
-    }
+	constructor() {
+		this.root = new TrieNode();
+	}
 
-    insert(token: string, tokenId: number) {
-        let node = this.root;
-        for (const char of token) {
-            if (!node.children.has(char)) {
-                node.children.set(char, new TrieNode());
-            }
-            node = node.children.get(char)!;
-        }
-        node.tokenId = tokenId;
-    }
+	insert(token: string, tokenId: number) {
+		let node = this.root;
+		for (const char of token) {
+			if (!node.children.has(char)) {
+				node.children.set(char, new TrieNode());
+			}
+			node = node.children.get(char)!;
+		}
+		node.tokenId = tokenId;
+	}
 
-    searchLongestToken(text: string): [number | null, number] {
-        let node = this.root;
-        let longestTokenId: number | null = null;
-        let currentTokenLength = 0;
+	searchLongestToken(text: string): [number | null, number] {
+		let node = this.root;
+		let longestTokenId: number | null = null;
+		let currentTokenLength = 0;
 
-        for (const char of text) {
-            if (!node.children.has(char)) {
-                break;
-            }
-            node = node.children.get(char)!;
-            currentTokenLength += 1;
-            if (node.tokenId !== null) {
-                longestTokenId = node.tokenId;
-            }
-        }
+		for (const char of text) {
+			if (!node.children.has(char)) {
+				break;
+			}
+			node = node.children.get(char)!;
+			currentTokenLength += 1;
+			if (node.tokenId !== null) {
+				longestTokenId = node.tokenId;
+			}
+		}
 
-        return [longestTokenId, currentTokenLength];
-    }
+		return [longestTokenId, currentTokenLength];
+	}
 }
 
 export default class BPETokenizer {
-    private trie: Trie;
+	private trie: Trie;
 
-    constructor(vocabulary: { [key: string]: number }) {
-        this.trie = new Trie();
-        for (const token in vocabulary) {
-            if (vocabulary.hasOwnProperty(token)) {
-                this.trie.insert(token, vocabulary[token]);
-            }
-        }
-    }
+	constructor(vocabulary: { [key: string]: number }) {
+		this.trie = new Trie();
+		for (const token in vocabulary) {
+			if (vocabulary.hasOwnProperty(token)) {
+				this.trie.insert(token, vocabulary[token]);
+			}
+		}
+	}
 
-    tokenize(text: string): number[] {
-        const tokenIds: number[] = [];
-        let i = 0;
+	tokenize(text: string): number[] {
+		const tokenIds: number[] = [];
+		let i = 0;
 
-        while (i < text.length) {
-            const [longestTokenId, length] = this.trie.searchLongestToken(text.slice(i));
-            if (longestTokenId !== null) {
-                tokenIds.push(longestTokenId);
-                i += length;
-            } else {
-                // If no token is found, treat the character as a single token
-                tokenIds.push(text.charCodeAt(i));
-                i += 1;
-            }
-        }
+		while (i < text.length) {
+			const [longestTokenId, length] = this.trie.searchLongestToken(text.slice(i));
+			if (longestTokenId !== null) {
+				tokenIds.push(longestTokenId);
+				i += length;
+			} else {
+				// If no token is found, treat the character as a single token
+				tokenIds.push(text.charCodeAt(i));
+				i += 1;
+			}
+		}
 
-        return tokenIds;
-    }
+		return tokenIds;
+	}
 }
 
 // Example usage:

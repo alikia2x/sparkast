@@ -5,60 +5,32 @@ import pjson from "./package.json";
 import { networkInterfaces } from "os";
 import cac from "cac";
 import { configureBackendRoutes } from "./backend/route";
+import { Server, IncomingMessage, ServerResponse } from "http";
+import { getLocalhostAddressIfDiffersFromDNS, wildcardHosts } from "lib/server/startScript";
 
 async function helloMessage() {
 	const { base } = await ViteExpress.getViteConfig();
-	const timeCost = new Date().getTime() - start.getTime();
-	console.log("");
+	const timeCost = Date.now() - start.getTime();
 	console.log(
-		"  ",
-		chalk.redBright("SparkHome"),
-		chalk.redBright("v" + pjson.version),
-		chalk.whiteBright(" ready in"),
-		`${Math.round(timeCost)} ms`
+		`\n  ${chalk.redBright("sparkast v" + pjson.version)} ${chalk.whiteBright("ready in")} ${Math.round(timeCost)} ms\n`
 	);
-	console.log("");
-	console.log(
-		"  ",
-		chalk.redBright("➜  "),
-		"Local:\t",
-		chalk.cyan(`http://${host}:${port}${base}`)
-	);
-	if (host !== "localhost") {
-		for (const ip of ips) {
+	console.log(`  ${chalk.redBright("➜  Local:")} ${chalk.cyan(`http://${name}:${port}${base}`)}`);
+	if (host === undefined) {
+		ips.forEach((ip) =>
 			console.log(
-				"  ",
-				chalk.redBright("➜  "),
-				"Network:\t",
-				chalk.cyan(`http://${ip}:${port}${base}`)
-			);
-		}
+				`  ${chalk.redBright("➜  Network:")} ${chalk.cyan(`http://${ip}:${port}${base}`)}`
+			)
+		);
 	}
-	console.log(
-		"  ",
-		chalk.red("➜  "),
-		chalk.whiteBright("press"),
-		"h + enter",
-		chalk.whiteBright("to show help")
-	);
+	console.log(`  ${chalk.red("➜  ")}${chalk.whiteBright("press h + enter to show help")}`);
 }
 
-async function handleInput() {
+async function handleInput(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
 	for await (const line of console) {
-		switch (line) {
+		switch (line.trim()) {
 			case "h":
-				console.log("  Shortcuts");
 				console.log(
-					"  ",
-					chalk.whiteBright("press"),
-					"c + enter ",
-					chalk.whiteBright("to clear console")
-				);
-				console.log(
-					"  ",
-					chalk.whiteBright("press"),
-					"q + enter ",
-					chalk.whiteBright("to quit")
+					`  Shortcuts\n  ${chalk.whiteBright("press c + enter to clear console")}\n  ${chalk.whiteBright("press q + enter to quit")}`
 				);
 				break;
 			case "c":
@@ -68,8 +40,6 @@ async function handleInput() {
 				server.on("vite:close", () => {});
 				server.close();
 				return;
-			default:
-				break;
 		}
 	}
 }
@@ -77,41 +47,48 @@ async function handleInput() {
 const start = new Date();
 const cli = cac();
 const nets = networkInterfaces();
-const ips: string[] = [];
-for (const name of Object.keys(nets)) {
-	if (nets[name] === undefined) {
-		continue;
-	}
-	for (const net of nets[name]) {
-		// Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
-		// 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
-		const familyV4Value = typeof net.family === "string" ? "IPv4" : 4;
-		if (net.family === familyV4Value && !net.internal) {
-			ips.push(net.address);
-		}
-	}
-}
+const ips: string[] = Object.values(nets)
+	.flat()
+	.filter(
+		(net) =>
+			!!net && net.family === (typeof net.family === "string" ? "IPv4" : 4) && !net.internal
+	)
+	.map((net) => (!!net ? net.address : undefined))
+	.filter((v) => v !== undefined);
 
 const app = express();
 const port = 3000;
-let host = "localhost";
 
-cli.option("--host [host]", "Sepcify host name");
-cli.help();
-cli.version(pjson.version);
+let host: string | undefined = "localhost";
+
+cli.option("--host [host]", "Specify host name").help().version(pjson.version);
 const parsed = cli.parse();
-if (
-	parsed.options.host !== undefined &&
-	typeof parsed.options.host == "boolean" &&
-	parsed.options.host
-) {
-	host = "0.0.0.0";
+const optionsHost: string | boolean | undefined = parsed.options.host;
+
+if (optionsHost === undefined || optionsHost === false) {
+	// Use a secure default
+	host = "localhost";
+} else if (optionsHost === true) {
+	// If passed --host in the CLI without arguments
+	host = undefined; // undefined typically means 0.0.0.0 or :: (listen on all IPs)
+} else {
+	host = optionsHost;
+}
+
+// Set host name to localhost when possible
+let name = host === undefined || wildcardHosts.has(host) ? "localhost" : host;
+
+if (host === "localhost") {
+	const localhostAddr = await getLocalhostAddressIfDiffersFromDNS();
+	if (localhostAddr) {
+		name = localhostAddr;
+	}
 }
 
 configureBackendRoutes(app);
-
-const server = app.listen(port, host);
+// if the var `host` is undefined, then just not pass it.
+const server = host ? app.listen(port, host) : app.listen(port);
 
 ViteExpress.bind(app, server, helloMessage);
 
-handleInput();
+handleInput(server);

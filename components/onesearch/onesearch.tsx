@@ -110,13 +110,12 @@ export default function OneSearch() {
 		})();
 	}, []);
 
-
 	useEffect(() => {
 		if (tokenizer !== null) return;
 		(async function () {
 			await loadTokenizer();
 		})();
-	},[]);
+	}, []);
 
 	async function loadModel(modelPath: string) {
 		ort.env.wasm.wasmPaths = "/onnx/";
