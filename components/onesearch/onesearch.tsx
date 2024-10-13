@@ -10,7 +10,7 @@ import LinkSuggestion from "./link";
 import { selectedSuggestionAtom } from "lib/state/suggestionSelection";
 import { settingsAtom } from "lib/state/settings";
 import PlainText from "./plainText";
-import { sendError } from "lib/telemetering/sendError";
+import { sendError } from "lib/feedback/sendError";
 import { handleNLUResult } from "./handleNLUResult";
 import * as ort from "onnxruntime-web";
 import { useAtom, useAtomValue } from "jotai";
